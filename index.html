@@ -40,21 +40,19 @@
     font-size: 2.5rem;
     text-align: center;
   }
-  /* Главное видео - уменьшено в 2 раза */
+  /* Главное видео - теперь как слайды */
   .main-video {
-    width: 45vw;
-    max-width: 640px;
-    height: calc(45vw * 9 / 16);
-    max-height: 360px;
+    width: 900px;
+    height: 507px;
     border-radius: 8px;
     border: 2px solid #fff;
     object-fit: cover;
   }
-  /* Слайды увеличены в 1.5 раза */
+  /* Слайды */
   .slider {
     position: relative;
-    width: 900px; /* 600 * 1.5 */
-    height: 507px; /* 338 * 1.5 */
+    width: 900px;
+    height: 507px;
     overflow: hidden;
     border-radius: 8px;
     background: rgba(0,0,0,0.5);
@@ -106,7 +104,7 @@
   <!-- Заголовок сверху -->
   <h1>DEMO REEL</h1>
 
-  <!-- Главное видео -->
+  <!-- Главное видео, теперь того же размера -->
   <video class="main-video" controls muted autoplay loop>
     <source src="demo.mp4" type="video/mp4" />
     Ваш браузер не поддерживает видео.
@@ -197,8 +195,8 @@
     points.push({
       x: Math.random()*width,
       y: Math.random()*height,
-      vx: (Math.random()-0.5)*0.5,  // скорость уменьшена в 3 раза
-      vy: (Math.random()-0.5)*0.5,  // скорость уменьшена в 3 раза
+      vx: (Math.random()-0.5)*0.5,
+      vy: (Math.random()-0.5)*0.5,
     });
   }
 
@@ -218,7 +216,6 @@
       if(p.x < 0 || p.x > width) p.vx *= -1;
       if(p.y < 0 || p.y > height) p.vy *= -1;
 
-      // Рисуем точки
       ctx.beginPath();
       ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
       ctx.fillStyle = '#fff';
@@ -241,8 +238,8 @@
 
           if(mdist < 100) {
             alpha = 1;
-            let forceX = mdx * 0.005;
-            let forceY = mdy * 0.005;
+            let forceX = mdx * 0.0005;
+            let forceY = mdy * 0.0005;
             points[i].vx += forceX;
             points[i].vy += forceY;
             points[j].vx += forceX;
