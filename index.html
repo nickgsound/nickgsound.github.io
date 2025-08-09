@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Видео слайды</title>
+<title>formersound</title>
 <style>
   * {
     margin: 0; padding: 0; box-sizing: border-box;
@@ -14,9 +14,24 @@
     font-family: Arial, sans-serif;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    justify-content: center;
     align-items: center;
+    padding: 20px;
+  }
+  /* Главное видео сверху */
+  .main-video {
+    width: 90vw;
+    max-width: 1280px;
+    height: calc(90vw * 9 / 16);
+    max-height: 720px;
+    border-radius: 8px;
+    border: 2px solid #fff;
+    object-fit: cover;
+  }
+  h1 {
+    margin-top: 50px; /* Отступ от видео */
+    margin-bottom: 50px; /* Отступ до слайдера */
+    font-size: 2.5rem;
+    text-align: center;
   }
   .slider {
     position: relative;
@@ -63,8 +78,16 @@
 </head>
 <body>
 
+<!-- Главное видео -->
+<video class="main-video" controls muted autoplay loop>
+  <source src="demo.mp4" type="video/mp4" />
+  Ваш браузер не поддерживает видео.
+</video>
+
+<!-- Заголовок -->
 <h1>nick gerasimov sound design</h1>
 
+<!-- Слайды с видео -->
 <div class="slider">
   <div class="slide active">
     <video controls muted>
