@@ -40,12 +40,12 @@
     font-size: 2.5rem;
     text-align: center;
   }
-  /* Главное видео - теперь как слайды */
+  /* Главное видео - теперь iframe YouTube */
   .main-video {
     width: 900px;
     height: 507px;
     border-radius: 8px;
-    /* border: 2px solid #fff;  <-- убрал рамку */
+    /* убрана рамка */
     object-fit: cover;
   }
   /* Слайды */
@@ -104,16 +104,22 @@
   <!-- Заголовок сверху -->
   <h1>DEMO REEL</h1>
 
-  <!-- Главное видео, теперь того же размера -->
-  <video class="main-video" controls muted autoplay loop>
-    <source src="demo.mp4" type="video/mp4" />
-    Ваш браузер не поддерживает видео.
-  </video>
+  <!-- Главное видео теперь iframe YouTube -->
+  <iframe
+    class="main-video"
+    src="https://www.youtube.com/embed/801EmKc-gdc?rel=0&modestbranding=1&autoplay=1&mute=1&loop=1&playlist=801EmKc-gdc"
+    frameborder="0"
+    allow="autoplay; encrypted-media"
+    allowfullscreen
+  ></iframe>
 
   <!-- Слайды с видео -->
   <div class="slider">
     <div class="slide active">
-      <iframe src="https://www.youtube.com/embed/801EmKc-gdc?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+      <video controls muted>
+        <source src="demo1.mp4" type="video/mp4" />
+        Ваш браузер не поддерживает видео.
+      </video>
     </div>
     <div class="slide">
       <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
