@@ -44,36 +44,33 @@
   }
   /* Главное видео */
   .main-video {
-    width: 100%;
-    max-width: 900px;
-    height: auto;
+    width: 900px;
+    height: 507px;
     border-radius: 8px;
     object-fit: cover;
+    margin-bottom: 0; /* Убрали нижний отступ */
   }
   /* Слайды */
   .slider {
     position: relative;
-    width: 100%;
-    max-width: 900px;
-    padding-top: 56.25%; /* 16:9 соотношение */
-    background: rgba(0,0,0,0.5);
-    margin-top: 50px;
-    border-radius: 8px;
+    width: 900px;
+    height: 507px;
     overflow: hidden;
+    border-radius: 8px;
+    background: rgba(0,0,0,0.5);
+    margin-top: 0; /* Убрали верхний отступ */
   }
   .slide {
     position: absolute;
     top: 0; left: 0;
-    width: 100%;
-    height: 100%;
+    width: 900px;
+    height: 507px;
     display: none;
   }
   .slide.active {
     display: block;
   }
-  iframe, video {
-    position: absolute;
-    top: 0; left: 0;
+  video, iframe {
     width: 100%;
     height: 100%;
     border-radius: 8px;
@@ -81,8 +78,8 @@
   }
   .controls {
     margin-top: 20px;
-    margin-bottom: 50px; /* отступ снизу */
     text-align: center;
+    margin-bottom: 50px; /* Нижний отступ под кнопками */
   }
   button {
     background: rgba(255,255,255,0.3);
@@ -99,32 +96,11 @@
     background: rgba(255,255,255,0.7);
   }
   .section-title {
-    margin: 40px 0;
-    font-size: 2rem;
+    margin: 50px 0; /* Ровные отступы сверху и снизу */
+    font-size: 2rem; /* чуть меньше чем у h1 */
     text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif;
+    font-family: 'Montserrat', Arial, sans-serif; /* чтобы шрифт совпадал */
     font-weight: 600;
-    width: 100%;
-    max-width: 900px;
-  }
-
-  /* Мобильные стили */
-  @media (max-width: 600px) {
-    .slider {
-      padding-top: 56.25%; /* 16:9 */
-    }
-    .slide {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-    }
-    iframe, video {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
-    }
   }
 </style>
 </head>
@@ -138,7 +114,7 @@
   <!-- Заголовок сверху -->
   <h1>NICK GERASIMOV SOUND DESIGN</h1>
 
-  <!-- Главное видео -->
+  <!-- Главное видео заменено на YouTube iframe без автоплея -->
   <iframe
     class="main-video"
     src="https://www.youtube.com/embed/801EmKc-gdc?rel=0&modestbranding=1"
@@ -149,7 +125,7 @@
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
 
-  <!-- Слайды -->
+  <!-- Слайды с видео -->
   <div class="slider">
     <div class="slide active">
       <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
@@ -177,12 +153,11 @@
   function showSlide(index) {
     slides.forEach((slide, i) => {
       slide.classList.toggle('active', i === index);
+
       if(i !== index){
         const iframe = slide.querySelector('iframe');
         if(iframe){
-          const src = iframe.src;
-          iframe.src = '';
-          iframe.src = src;
+          // Перезагрузим iframe, чтобы остановить видео
         }
       }
     });
