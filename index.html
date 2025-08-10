@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>formersound</title>
+    <!-- Подключаем Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,8 +17,11 @@
             overflow-x: hidden;
         }
         h1 {
-            margin: 100px 0;
+            margin: 100px 0 50px 0;
             font-size: 2.5rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            letter-spacing: 2px;
         }
         iframe {
             max-width: 80%;
@@ -27,7 +32,7 @@
         .slider {
             position: relative;
             max-width: 80%;
-            margin: 0 auto;
+            margin: 50px auto 0 auto;
             overflow: hidden;
         }
         .slides {
@@ -56,6 +61,19 @@
             left: 0;
             z-index: -1;
         }
+        /* Блок под первым видео */
+        .featured-text {
+            margin: 100px 0 0 0;
+        }
+        .featured-text h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .featured-text p {
+            opacity: 0.8;
+            font-size: 1.2rem;
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -69,30 +87,26 @@
         allowfullscreen>
     </iframe>
 
-    <!-- Слайдер -->
-    <div style="margin-top:100px;">
-        <div class="slider">
-            <div class="slides" id="slides">
-                <div class="slide">
-                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_1?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
-                </div>
-                <div class="slide">
-                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_2?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
-        <div class="controls">
-            <button onclick="prevSlide()">Назад</button>
-            <button onclick="nextSlide()">Вперёд</button>
-        </div>
+    <!-- Текст под главным видео -->
+    <div class="featured-text">
+        <h2>Featured Sound Design Projects</h2>
+        <p>A selection of my recent audio work</p>
     </div>
 
-    <!-- Новый блок -->
-    <div style="margin-top:100px; margin-bottom:100px; text-align:center;">
-        <h2 style="font-size:2rem;">Featured Sound Design Projects</h2>
-        <p style="opacity:0.8; font-size:1.2rem;">
-            A selection of my recent audio work
-        </p>
+    <!-- Слайдер -->
+    <div class="slider">
+        <div class="slides" id="slides">
+            <div class="slide">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_1?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
+            </div>
+            <div class="slide">
+                <iframe src="https://www.youtube.com/embed/VIDEO_ID_2?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+    <div class="controls">
+        <button onclick="prevSlide()">Назад</button>
+        <button onclick="nextSlide()">Вперёд</button>
     </div>
 
     <script>
