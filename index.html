@@ -158,30 +158,35 @@
 
 <script>
   // Слайдер
-  const slides = document.querySelectorAll('.slide');
-  let current = 0;
+const slides = document.querySelectorAll('.slide');
+let current = 0;
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-
-      if(i !== index){
-        const iframe = slide.querySelector('iframe');
-        if(iframe){
-          iframe.src = iframe.src; // перезагрузка iframe для паузы
-        }
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    if (i === index) {
+      slide.classList.add('active');
+      const vid = slide.querySelector('video');
+      if (vid) vid.play();
+    } else {
+      slide.classList.remove('active');
+      const vid = slide.querySelector('video');
+      if (vid) {
+        vid.pause();
+        vid.currentTime = 0;
       }
-    });
-    current = index;
-  }
-
-  document.getElementById('prev').addEventListener('click', () => {
-    showSlide((current - 1 + slides.length) % slides.length);
+      // iframe оставляем без перезагрузки
+    }
   });
+  current = index;
+}
 
-  document.getElementById('next').addEventListener('click', () => {
-    showSlide((current + 1) % slides.length);
-  });
+document.getElementById('prev').addEventListener('click', () => {
+  showSlide((current - 1 + slides.length) % slides.length);
+});
+
+document.getElementById('next').addEventListener('click', () => {
+  showSlide((current + 1) % slides.length);
+});
 
   // Анимация линий на canvas
   const canvas = document.getElementById('canvas');
