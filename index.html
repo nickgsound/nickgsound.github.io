@@ -23,24 +23,43 @@
             font-weight: 700;
             letter-spacing: 2px;
         }
-        iframe {
-            max-width: 80%;
-            height: 450px;
-            border: none;
+        .video-container {
+            width: 960px;
+            height: 540px;
+            margin: 0 auto 40px auto;
             border-radius: 8px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 960px;
+            height: 540px;
+            border: none;
+            display: block;
+        }
+        .featured-text {
+            margin: 50px 0;
+        }
+        .featured-text h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        .featured-text p {
+            opacity: 0.8;
+            font-size: 1.2rem;
+            margin: 0;
         }
         .slider {
-            position: relative;
-            max-width: 80%;
-            margin: 50px auto 0 auto;
+            width: 960px;
+            margin: 0 auto;
             overflow: hidden;
+            position: relative;
         }
         .slides {
             display: flex;
             transition: transform 0.5s ease-in-out;
         }
         .slide {
-            min-width: 100%;
+            min-width: 960px;
             box-sizing: border-box;
         }
         .controls {
@@ -61,19 +80,6 @@
             left: 0;
             z-index: -1;
         }
-        /* Блок под первым видео */
-        .featured-text {
-            margin: 100px 0 0 0;
-        }
-        .featured-text h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        .featured-text p {
-            opacity: 0.8;
-            font-size: 1.2rem;
-            margin: 0;
-        }
     </style>
 </head>
 <body>
@@ -82,10 +88,12 @@
     <h1>DEMO REEL</h1>
 
     <!-- Главное видео -->
-    <iframe 
-        src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" 
-        allowfullscreen>
-    </iframe>
+    <div class="video-container">
+        <iframe 
+            src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" 
+            allowfullscreen>
+        </iframe>
+    </div>
 
     <!-- Текст под главным видео -->
     <div class="featured-text">
@@ -116,7 +124,7 @@
         const totalSlides = slides.children.length;
 
         function updateSlide() {
-            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            slides.style.transform = `translateX(-${currentSlide * 960}px)`;
         }
 
         function nextSlide() {
@@ -149,8 +157,8 @@
             points.push({
                 x: Math.random() * width,
                 y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5
+                vx: (Math.random() - 0.5) * 0.15, // замедлил скорость
+                vy: (Math.random() - 0.5) * 0.15
             });
         }
 
@@ -189,8 +197,8 @@
 
                         if (mdist < 150) {
                             alpha = 1;
-                            let forceX = mdx * 0.0001;
-                            let forceY = mdy * 0.0001;
+                            let forceX = mdx * 0.00005; // ещё медленнее реакция
+                            let forceY = mdy * 0.00005;
                             points[i].vx += forceX;
                             points[i].vy += forceY;
                             points[j].vx += forceX;
@@ -210,6 +218,12 @@
         }
 
         draw();
+
+        // Обработка ресайза окна
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
     </script>
 </body>
 </html>
