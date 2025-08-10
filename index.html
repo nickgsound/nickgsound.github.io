@@ -1,11 +1,4 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>formersound</title>
 <style>
-  /* Сбросы и базовые стили */
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
@@ -16,7 +9,6 @@
     font-family: Arial, sans-serif;
     overflow-x: hidden;
   }
-  /* Холст с анимацией на заднем фоне */
   #canvas {
     position: fixed;
     top: 0; left: 0;
@@ -25,7 +17,6 @@
     z-index: 0;
     display: block;
   }
-  /* Контент поверх анимации */
   .content {
     position: relative;
     z-index: 10;
@@ -34,21 +25,18 @@
     align-items: center;
     padding: 20px;
   }
-  /* Заголовок сверху */
   h1 {
-    margin-bottom: 50px;
+    margin-top: 100px;   /* отступ сверху */
+    margin-bottom: 100px; /* от DEMO REEL до видео */
     font-size: 2.5rem;
     text-align: center;
   }
-  /* Главное видео - теперь как слайды */
   .main-video {
     width: 900px;
     height: 507px;
     border-radius: 8px;
-    border: 2px solid #fff;
     object-fit: cover;
   }
-  /* Слайды */
   .slider {
     position: relative;
     width: 900px;
@@ -93,174 +81,3 @@
     background: rgba(255,255,255,0.7);
   }
 </style>
-</head>
-<body>
-
-<!-- Canvas для анимации линий -->
-<canvas id="canvas"></canvas>
-
-<div class="content">
-
-  <!-- Заголовок сверху -->
-  <h1>DEMO REEL</h1>
-
-  <!-- Главное видео, теперь того же размера -->
-  <video class="main-video" controls muted autoplay loop>
-    <source src="demo.mp4" type="video/mp4" />
-    Ваш браузер не поддерживает видео.
-  </video>
-
-  <!-- Слайды с видео -->
-  <div class="slider">
-    <div class="slide active">
-      <video controls muted>
-        <source src="demo1.mp4" type="video/mp4" />
-        Ваш браузер не поддерживает видео.
-      </video>
-    </div>
-    <div class="slide">
-      <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="slide">
-      <video controls muted>
-        <source src="demo2.mp4" type="video/mp4" />
-        Ваш браузер не поддерживает видео.
-      </video>
-    </div>
-  </div>
-
-  <div class="controls">
-    <button id="prev">← Назад</button>
-    <button id="next">Вперед →</button>
-  </div>
-
-</div>
-
-<script>
-  // Слайдер
-  const slides = document.querySelectorAll('.slide');
-  let current = 0;
-
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-
-      if(i !== index){
-        const vid = slide.querySelector('video');
-        if(vid){
-          vid.pause();
-          vid.currentTime = 0;
-        }
-        const iframe = slide.querySelector('iframe');
-        if(iframe){
-          iframe.src = iframe.src; // перезагрузка iframe для паузы
-        }
-      } else {
-        const vid = slide.querySelector('video');
-        if(vid){
-          vid.play();
-        }
-      }
-    });
-    current = index;
-  }
-
-  document.getElementById('prev').addEventListener('click', () => {
-    showSlide((current - 1 + slides.length) % slides.length);
-  });
-
-  document.getElementById('next').addEventListener('click', () => {
-    showSlide((current + 1) % slides.length);
-  });
-
-  // Анимация линий на canvas
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  let width, height;
-
-  function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  const points = [];
-  const pointCount = 30;
-  const maxDistance = 150;
-
-  for(let i=0; i<pointCount; i++) {
-    points.push({
-      x: Math.random()*width,
-      y: Math.random()*height,
-      vx: (Math.random()-0.5)*0.5,
-      vy: (Math.random()-0.5)*0.5,
-    });
-  }
-
-  let mouse = {x: width/2, y: height/2};
-
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
-
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
-
-    points.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      if(p.x < 0 || p.x > width) p.vx *= -1;
-      if(p.y < 0 || p.y > height) p.vy *= -1;
-
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-    });
-
-    for(let i=0; i<pointCount; i++) {
-      for(let j=i+1; j<pointCount; j++) {
-        let dx = points[i].x - points[j].x;
-        let dy = points[i].y - points[j].y;
-        let dist = Math.sqrt(dx*dx + dy*dy);
-
-        if(dist < maxDistance) {
-          let alpha = 1 - dist / maxDistance;
-          let midX = (points[i].x + points[j].x)/2;
-          let midY = (points[i].y + points[j].y)/2;
-          let mdx = mouse.x - midX;
-          let mdy = mouse.y - midY;
-          let mdist = Math.sqrt(mdx*mdx + mdy*mdy);
-
-          if(mdist < 100) {
-            alpha = 1;
-            let forceX = mdx * 0.0005;
-            let forceY = mdy * 0.0005;
-            points[i].vx += forceX;
-            points[i].vy += forceY;
-            points[j].vx += forceX;
-            points[j].vy += forceY;
-          }
-
-          ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(points[i].x, points[i].y);
-          ctx.lineTo(points[j].x, points[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-
-    requestAnimationFrame(draw);
-  }
-
-  draw();
-</script>
-
-</body>
-</html>
