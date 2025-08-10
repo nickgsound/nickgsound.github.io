@@ -57,12 +57,17 @@
     height: auto; /* браузер сам высчитает высоту */
     background: rgba(0,0,0,0.5);
     margin-top: 0; /* Убрали верхний отступ */
+    position: relative; /* важно для абсолютного позиционирования слайдов */
+    overflow: hidden;   /* скрыть неактивные слайды за пределами контейнера */
+    border-radius: 8px;
   }
   .slide {
+  position: absolute; /* накладываем слайды друг на друга */
+  top: 0;
+  left: 0;
   width: 100%;
-  max-width: 900px; /* ограничение сверху, чтобы на больших экранах не растягивалось */
-  aspect-ratio: 16 / 9; /* сохраняем пропорции видео */
-  height: auto; /* чтобы браузер сам подбирал высоту */
+  height: 100%; /* чтобы iframe занимал весь контейнер */
+  display: none;
   }
   .slide.active {
     display: block;
