@@ -44,28 +44,25 @@
   }
   /* Главное видео */
   .main-video {
-    width: 900px;
-    height: 507px;
-    border-radius: 8px;
-    object-fit: cover;
-    margin-bottom: 0; /* Убрали нижний отступ */
+  width: 100%;
+  max-width: 900px; /* ограничение для больших экранов */
+  aspect-ratio: 16 / 9; /* сохраняем пропорции */
+  height: auto; /* браузер сам высчитает высоту */
   }
   /* Слайды */
   .slider {
-    position: relative;
-    width: 900px;
-    height: 507px;
-    overflow: hidden;
-    border-radius: 8px;
+    width: 100%;
+    max-width: 900px; /* ограничение для больших экранов */
+    aspect-ratio: 16 / 9; /* сохраняем пропорции */
+    height: auto; /* браузер сам высчитает высоту */
     background: rgba(0,0,0,0.5);
     margin-top: 0; /* Убрали верхний отступ */
   }
   .slide {
-    position: absolute;
-    top: 0; left: 0;
-    width: 900px;
-    height: 507px;
-    display: none;
+  width: 100%;
+  max-width: 900px; /* ограничение сверху, чтобы на больших экранах не растягивалось */
+  aspect-ratio: 16 / 9; /* сохраняем пропорции видео */
+  height: auto; /* чтобы браузер сам подбирал высоту */
   }
   .slide.active {
     display: block;
