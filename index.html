@@ -23,8 +23,11 @@
   <canvas id="canvas"></canvas>
   <div class="content">
     <h1>DEMO REEL</h1>
+
+    <!-- Первое видео -->
     <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
 
+    <!-- Слайдер -->
     <div class="slider">
       <div class="slide active">
         <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
@@ -34,6 +37,7 @@
       </div>
     </div>
 
+    <!-- Кнопки -->
     <div class="controls">
       <button onclick="prevSlide()">Prev</button>
       <button onclick="nextSlide()">Next</button>
@@ -83,11 +87,18 @@
 
     function draw() {
       ctx.clearRect(0, 0, width, height);
+
       points.forEach(p => {
+        // замедление (трение)
+        p.vx *= 0.98;
+        p.vy *= 0.98;
+
         p.x += p.vx;
         p.y += p.vy;
+
         if (p.x < 0 || p.x > width) p.vx *= -1;
         if (p.y < 0 || p.y > height) p.vy *= -1;
+
         ctx.beginPath();
         ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
         ctx.fillStyle = '#fff';
@@ -108,8 +119,8 @@
             let mdist = Math.sqrt(mdx * mdx + mdy * mdy);
             if (mdist < 100) {
               alpha = 1;
-              let forceX = mdx * 0.0005;
-              let forceY = mdy * 0.0005;
+              let forceX = mdx * 0.00005; // медленное притяжение
+              let forceY = mdy * 0.00005;
               points[i].vx += forceX;
               points[i].vy += forceY;
               points[j].vx += forceX;
