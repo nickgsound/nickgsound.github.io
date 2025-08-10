@@ -1,142 +1,201 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DEMO REEL</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body, html { height: 100%; background: #111; color: #fff; font-family: Arial, sans-serif; }
-    #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; display: block; }
-    .content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    h1 { margin-top: 100px; margin-bottom: 100px; font-size: 2.5rem; text-align: center; }
-    iframe { width: 900px; height: 507px; border-radius: 8px; object-fit: cover; border: none; }
-    .slider { position: relative; width: 900px; height: 507px; overflow: hidden; border-radius: 8px; margin-top: 50px; }
-    .slide { position: absolute; top: 0; left: 0; width: 900px; height: 507px; display: none; }
-    .slide.active { display: block; }
-    .controls { margin-top: 20px; text-align: center; }
-    button { background: rgba(255,255,255,0.3); border: none; padding: 10px 20px; margin: 0 10px; color: #fff; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background 0.3s; }
-    button:hover { background: rgba(255,255,255,0.7); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formersound</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        h1 {
+            margin: 100px 0;
+            font-size: 2.5rem;
+        }
+        iframe {
+            max-width: 80%;
+            height: 450px;
+            border: none;
+            border-radius: 8px;
+        }
+        .slider {
+            position: relative;
+            max-width: 80%;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .controls {
+            margin-top: 20px;
+        }
+        .controls button {
+            background: #444;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="canvas"></canvas>
-  <div class="content">
+    <canvas id="bg"></canvas>
+
     <h1>DEMO REEL</h1>
 
-    <!-- Первое видео -->
-    <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
+    <!-- Главное видео -->
+    <iframe 
+        src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" 
+        allowfullscreen>
+    </iframe>
 
     <!-- Слайдер -->
-    <div class="slider">
-      <div class="slide active">
-        <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
-      </div>
-      <div class="slide">
-        <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
-      </div>
+    <div style="margin-top:100px;">
+        <div class="slider">
+            <div class="slides" id="slides">
+                <div class="slide">
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_1?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
+                </div>
+                <div class="slide">
+                    <iframe src="https://www.youtube.com/embed/VIDEO_ID_2?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button onclick="prevSlide()">Назад</button>
+            <button onclick="nextSlide()">Вперёд</button>
+        </div>
     </div>
 
-    <!-- Кнопки -->
-    <div class="controls">
-      <button onclick="prevSlide()">Prev</button>
-      <button onclick="nextSlide()">Next</button>
+    <!-- Новый блок -->
+    <div style="margin-top:100px; margin-bottom:100px; text-align:center;">
+        <h2 style="font-size:2rem;">Featured Sound Design Projects</h2>
+        <p style="opacity:0.8; font-size:1.2rem;">
+            A selection of my recent audio work
+        </p>
     </div>
-  </div>
 
-  <script>
-    // Слайдер
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    function showSlide(index) {
-      slides.forEach(s => s.classList.remove('active'));
-      slides[index].classList.add('active');
-    }
-    function prevSlide() {
-      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-      showSlide(currentSlide);
-    }
-    function nextSlide() {
-      currentSlide = (currentSlide + 1) % slides.length;
-      showSlide(currentSlide);
-    }
+    <script>
+        // Слайдер
+        let currentSlide = 0;
+        const slides = document.getElementById('slides');
+        const totalSlides = slides.children.length;
 
-    // Анимация линий
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-    let width = canvas.width = window.innerWidth;
-    let height = canvas.height = window.innerHeight;
-    let points = [];
-    const pointCount = 50;
-    const maxDistance = 150;
-    const mouse = { x: null, y: null };
-
-    for (let i = 0; i < pointCount; i++) {
-      points.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5
-      });
-    }
-
-    canvas.addEventListener('mousemove', e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
-
-    function draw() {
-      ctx.clearRect(0, 0, width, height);
-
-      points.forEach(p => {
-        // замедление (трение)
-        p.vx *= 0.98;
-        p.vy *= 0.98;
-
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-        ctx.fillStyle = '#fff';
-        ctx.fill();
-      });
-
-      for (let i = 0; i < pointCount; i++) {
-        for (let j = i + 1; j < pointCount; j++) {
-          let dx = points[i].x - points[j].x;
-          let dy = points[i].y - points[j].y;
-          let dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < maxDistance) {
-            let alpha = 1 - dist / maxDistance;
-            let midX = (points[i].x + points[j].x) / 2;
-            let midY = (points[i].y + points[j].y) / 2;
-            let mdx = mouse.x - midX;
-            let mdy = mouse.y - midY;
-            let mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-            if (mdist < 100) {
-              alpha = 1;
-              let forceX = mdx * 0.00005; // медленное притяжение
-              let forceY = mdy * 0.00005;
-              points[i].vx += forceX;
-              points[i].vy += forceY;
-              points[j].vx += forceX;
-              points[j].vy += forceY;
-            }
-            ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-            ctx.beginPath();
-            ctx.moveTo(points[i].x, points[i].y);
-            ctx.lineTo(points[j].x, points[j].y);
-            ctx.stroke();
-          }
+        function updateSlide() {
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
-      }
-      requestAnimationFrame(draw);
-    }
-    draw();
-  </script>
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateSlide();
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateSlide();
+        }
+
+        // Анимация точек
+        const canvas = document.getElementById('bg');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        let mouse = { x: width / 2, y: height / 2 };
+        canvas.addEventListener('mousemove', e => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+        });
+
+        const pointCount = 50;
+        const points = [];
+        const maxDistance = 150;
+
+        for (let i = 0; i < pointCount; i++) {
+            points.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            points.forEach(p => {
+                p.vx *= 0.98;
+                p.vy *= 0.98;
+                p.x += p.vx;
+                p.y += p.vy;
+
+                if (p.x < 0 || p.x > width) p.vx *= -1;
+                if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+            });
+
+            for (let i = 0; i < pointCount; i++) {
+                for (let j = i + 1; j < pointCount; j++) {
+                    let dx = points[i].x - points[j].x;
+                    let dy = points[i].y - points[j].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < maxDistance) {
+                        let alpha = 1 - dist / maxDistance;
+
+                        let midX = (points[i].x + points[j].x) / 2;
+                        let midY = (points[i].y + points[j].y) / 2;
+                        let mdx = mouse.x - midX;
+                        let mdy = mouse.y - midY;
+                        let mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+
+                        if (mdist < 150) {
+                            alpha = 1;
+                            let forceX = mdx * 0.0001;
+                            let forceY = mdy * 0.0001;
+                            points[i].vx += forceX;
+                            points[i].vy += forceY;
+                            points[j].vx += forceX;
+                            points[j].vy += forceY;
+                        }
+
+                        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+                        ctx.beginPath();
+                        ctx.moveTo(points[i].x, points[i].y);
+                        ctx.lineTo(points[j].x, points[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(draw);
+        }
+
+        draw();
+    </script>
 </body>
 </html>
