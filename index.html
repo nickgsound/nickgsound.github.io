@@ -48,6 +48,15 @@
     height: 507px;
     border-radius: 8px;
     object-fit: cover;
+    margin-bottom: 50px; /* добавлено */
+  }
+  /* Заголовок раздела */
+  .section-title {
+    margin: 50px 0 0 0; /* сверху 50px, снизу 0 */
+    font-size: 2rem;
+    text-align: center;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
   }
   /* Слайды */
   .slider {
@@ -76,9 +85,8 @@
     object-fit: cover;
   }
   .controls {
-    margin-top: 20px;
+    margin: 20px 0 50px 0; /* отступ сверху 20px, снизу 50px */
     text-align: center;
-    margin-bottom: 50px;
   }
   button {
     background: rgba(255,255,255,0.3);
@@ -94,13 +102,6 @@
   button:hover {
     background: rgba(255,255,255,0.7);
   }
-  .section-title {
-  margin: 50px 0; /* такой же вертикальный отступ, как у h1 */
-  font-size: 2rem; /* чуть меньше чем у h1 */
-  text-align: center;
-  font-family: 'Montserrat', Arial, sans-serif; /* чтобы шрифт совпадал */
-  font-weight: 600;
-}
 </style>
 </head>
 <body>
@@ -128,7 +129,7 @@
   <div class="slider">
     <div class="slide active">
       <iframe
-        src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3"
+        src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1"
         frameborder="0"
         allowfullscreen
       ></iframe>
@@ -142,7 +143,7 @@
     </div>
     <div class="slide">
       <iframe
-        src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3"
+        src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1"
         frameborder="0"
         allowfullscreen
       ></iframe>
@@ -158,35 +159,31 @@
 
 <script>
   // Слайдер
-const slides = document.querySelectorAll('.slide');
-let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  let current = 0;
 
-function showSlide(index) {
-  slides.forEach((slide, i) => {
-    if (i === index) {
-      slide.classList.add('active');
-      const vid = slide.querySelector('video');
-      if (vid) vid.play();
-    } else {
-      slide.classList.remove('active');
-      const vid = slide.querySelector('video');
-      if (vid) {
-        vid.pause();
-        vid.currentTime = 0;
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+
+      if(i !== index){
+        const iframe = slide.querySelector('iframe');
+        if(iframe){
+          // Перезагрузка iframe для паузы видео
+          iframe.src = iframe.src;
+        }
       }
-      // iframe оставляем без перезагрузки
-    }
+    });
+    current = index;
+  }
+
+  document.getElementById('prev').addEventListener('click', () => {
+    showSlide((current - 1 + slides.length) % slides.length);
   });
-  current = index;
-}
 
-document.getElementById('prev').addEventListener('click', () => {
-  showSlide((current - 1 + slides.length) % slides.length);
-});
-
-document.getElementById('next').addEventListener('click', () => {
-  showSlide((current + 1) % slides.length);
-});
+  document.getElementById('next').addEventListener('click', () => {
+    showSlide((current + 1) % slides.length);
+  });
 
   // Анимация линий на canvas
   const canvas = document.getElementById('canvas');
