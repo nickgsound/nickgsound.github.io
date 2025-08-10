@@ -247,25 +247,28 @@
             points[j].vy += forceY;
           }
 
-ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-ctx.lineWidth = 1;
-
-// делаем бегущие штрихи
-ctx.setLineDash([5, 10]); // длина штриха и пробела
-ctx.lineDashOffset = -Date.now() / 50;
-
 ctx.beginPath();
-ctx.moveTo(points[i].x, points[i].y);
-ctx.quadraticCurveTo(
-  midX + Math.sin(Date.now() / 500) * 20, // изгиб
-  midY,
-  points[j].x,
-  points[j].y
-);
-ctx.stroke();
+let segments = 20; // количество точек на линии
+for (let k = 0; k <= segments; k++) {
+  let t = k / segments;
+  let x = points[i].x + (points[j].x - points[i].x) * t;
+  let y = points[i].y + (points[j].y - points[i].y) * t;
 
-// сбрасываем штриховку
-ctx.setLineDash([]);
+  // смещение по синусоиде
+  let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
+  let perpX = -(points[j].y - points[i].y);
+  let perpY = (points[j].x - points[i].x);
+  let len = Math.sqrt(perpX * perpX + perpY * perpY);
+  perpX /= len;
+  perpY /= len;
+
+  x += perpX * offset;
+  y += perpY * offset;
+
+  if (k === 0) ctx.moveTo(x, y);
+  else ctx.lineTo(x, y);
+}
+ctx.stroke();
         }
       }
     }
