@@ -249,9 +249,13 @@
 
 ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
 ctx.lineWidth = 1;
+
+// делаем бегущие штрихи
+ctx.setLineDash([5, 10]); // длина штриха и пробела
+ctx.lineDashOffset = -Date.now() / 50;
+
 ctx.beginPath();
 ctx.moveTo(points[i].x, points[i].y);
-// плавная кривая через midpoint
 ctx.quadraticCurveTo(
   midX + Math.sin(Date.now() / 500) * 20, // изгиб
   midY,
@@ -259,6 +263,9 @@ ctx.quadraticCurveTo(
   points[j].y
 );
 ctx.stroke();
+
+// сбрасываем штриховку
+ctx.setLineDash([]);
         }
       }
     }
