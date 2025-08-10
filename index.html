@@ -48,15 +48,7 @@
     height: 507px;
     border-radius: 8px;
     object-fit: cover;
-    margin-bottom: 50px; /* добавлено */
-  }
-  /* Заголовок раздела */
-  .section-title {
-    margin: 50px 0 0 0; /* сверху 50px, снизу 0 */
-    font-size: 2rem;
-    text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif;
-    font-weight: 600;
+    margin-bottom: 0; /* Убрали нижний отступ */
   }
   /* Слайды */
   .slider {
@@ -66,7 +58,7 @@
     overflow: hidden;
     border-radius: 8px;
     background: rgba(0,0,0,0.5);
-    margin-top: 50px;
+    margin-top: 0; /* Убрали верхний отступ */
   }
   .slide {
     position: absolute;
@@ -85,8 +77,9 @@
     object-fit: cover;
   }
   .controls {
-    margin: 20px 0 50px 0; /* отступ сверху 20px, снизу 50px */
+    margin-top: 20px;
     text-align: center;
+    margin-bottom: 50px; /* Нижний отступ под кнопками */
   }
   button {
     background: rgba(255,255,255,0.3);
@@ -101,6 +94,13 @@
   }
   button:hover {
     background: rgba(255,255,255,0.7);
+  }
+  .section-title {
+    margin: 50px 0; /* Ровные отступы сверху и снизу */
+    font-size: 2rem; /* чуть меньше чем у h1 */
+    text-align: center;
+    font-family: 'Montserrat', Arial, sans-serif; /* чтобы шрифт совпадал */
+    font-weight: 600;
   }
 </style>
 </head>
@@ -128,25 +128,13 @@
   <!-- Слайды с видео -->
   <div class="slider">
     <div class="slide active">
-      <iframe
-        src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
+      <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
     </div>
     <div class="slide">
-      <iframe
-        src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
+      <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
     </div>
     <div class="slide">
-      <iframe
-        src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1"
-        frameborder="0"
-        allowfullscreen
-      ></iframe>
+      <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
 
@@ -169,7 +157,7 @@
       if(i !== index){
         const iframe = slide.querySelector('iframe');
         if(iframe){
-          // Перезагрузка iframe для паузы видео
+          // Перезагрузим iframe, чтобы остановить видео
           iframe.src = iframe.src;
         }
       }
