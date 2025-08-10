@@ -206,12 +206,16 @@
     mouse.y = e.clientY;
   });
 
-  function draw() {
+  function draw(timestamp) {
+    if (!timestamp) timestamp = performance.now();
+    const delta = (timestamp - lastTimestamp) / 16.67; // нормализация на 60 FPS (~16.67мс)
+    lastTimestamp = timestamp;
+
     ctx.clearRect(0, 0, width, height);
 
     points.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
+      p.x += p.vx * delta;
+      p.y += p.vy * delta;
       if(p.x < 0 || p.x > width) p.vx *= -1;
       if(p.y < 0 || p.y > height) p.vy *= -1;
 
@@ -237,8 +241,8 @@
 
           if(mdist < 100) {
             alpha = 1;
-            let forceX = mdx * 0.0005;
-            let forceY = mdy * 0.0005;
+            let forceX = mdx * 0.0005 * delta;
+            let forceY = mdy * 0.0005 * delta;
             points[i].vx += forceX;
             points[i].vy += forceY;
             points[j].vx += forceX;
@@ -258,7 +262,7 @@
     requestAnimationFrame(draw);
   }
 
-  draw();
+  requestAnimationFrame(draw);
 </script>
 
 </body>
