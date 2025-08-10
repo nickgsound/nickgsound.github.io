@@ -208,36 +208,39 @@
     mouse.y = e.clientY;
   });
 
-  function draw() {
+ function draw() {
     ctx.clearRect(0, 0, width, height);
 
+    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
-      if(p.x < 0 || p.x > width) p.vx *= -1;
-      if(p.y < 0 || p.y > height) p.vy *= -1;
+      if (p.x < 0 || p.x > width) p.vx *= -1;
+      if (p.y < 0 || p.y > height) p.vy *= -1;
 
       ctx.beginPath();
-      ctx.arc(p.x, p.y, 3, 0, Math.PI*2);
+      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
       ctx.fillStyle = '#fff';
       ctx.fill();
     });
 
-    for(let i=0; i<pointCount; i++) {
-      for(let j=i+1; j<pointCount; j++) {
+    // Соединяем точки
+    for (let i = 0; i < pointCount; i++) {
+      for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
         let dy = points[i].y - points[j].y;
-        let dist = Math.sqrt(dx*dx + dy*dy);
+        let dist = Math.sqrt(dx * dx + dy * dy);
 
-        if(dist < maxDistance) {
+        if (dist < maxDistance) {
           let alpha = 1 - dist / maxDistance;
-          let midX = (points[i].x + points[j].x)/2;
-          let midY = (points[i].y + points[j].y)/2;
+
+          let midX = (points[i].x + points[j].x) / 2;
+          let midY = (points[i].y + points[j].y) / 2;
           let mdx = mouse.x - midX;
           let mdy = mouse.y - midY;
-          let mdist = Math.sqrt(mdx*mdx + mdy*mdy);
+          let mdist = Math.sqrt(mdx * mdx + mdy * mdy);
 
-          if(mdist < 100) {
+          if (mdist < 100) {
             alpha = 1;
             let forceX = mdx * 0.0005;
             let forceY = mdy * 0.0005;
@@ -247,28 +250,36 @@
             points[j].vy += forceY;
           }
 
-ctx.beginPath();
-let segments = 20; // количество точек на линии
-for (let k = 0; k <= segments; k++) {
-  let t = k / segments;
-  let x = points[i].x + (points[j].x - points[i].x) * t;
-  let y = points[i].y + (points[j].y - points[i].y) * t;
+          // Настройки линии
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // белая
+          ctx.lineWidth = 1.2;
+          ctx.shadowBlur = 8; // свечение
+          ctx.shadowColor = 'white';
 
-  // смещение по синусоиде
-  let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
-  let perpX = -(points[j].y - points[i].y);
-  let perpY = (points[j].x - points[i].x);
-  let len = Math.sqrt(perpX * perpX + perpY * perpY);
-  perpX /= len;
-  perpY /= len;
+          // Волновая линия (аудио-эффект)
+          ctx.beginPath();
+          let segments = 20; // количество сегментов волны
+          for (let k = 0; k <= segments; k++) {
+            let t = k / segments;
+            let x = points[i].x + (points[j].x - points[i].x) * t;
+            let y = points[i].y + (points[j].y - points[i].y) * t;
 
-  x += perpX * offset;
-  y += perpY * offset;
+            // смещение по синусоиде
+            let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
+            let perpX = -(points[j].y - points[i].y);
+            let perpY = (points[j].x - points[i].x);
+            let len = Math.sqrt(perpX * perpX + perpY * perpY);
+            perpX /= len;
+            perpY /= len;
 
-  if (k === 0) ctx.moveTo(x, y);
-  else ctx.lineTo(x, y);
-}
-ctx.stroke();
+            x += perpX * offset;
+            y += perpY * offset;
+
+            if (k === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+
+          ctx.stroke();
         }
       }
     }
