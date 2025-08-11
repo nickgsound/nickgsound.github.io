@@ -30,14 +30,13 @@
   .content {
     position: relative;
     z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 0;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
   }
   /* Заголовок сверху */
   h1 {
-    margin: 50px 0;
+    margin: 50px 0 40px 0;
     font-size: 2.5rem;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
@@ -48,71 +47,110 @@
     max-width: 900px;
     aspect-ratio: 16 / 9;
     height: auto;
-  }
-  /* Новый блок с видео и текстом */
-  .project-container {
-    display: flex;
-    max-width: 900px;
-    width: 100%;
-    gap: 20px;
-    margin-top: 40px;
-  }
-  .project-video {
-    flex: 4; /* около 80% */
-  }
-  .project-video iframe {
-    width: 100%;
-    aspect-ratio: 16 / 9;
+    margin: 0 auto 60px auto;
+    display: block;
     border-radius: 8px;
   }
-  .project-text {
-    flex: 1; /* около 20% */
+  /* Секция слайдера и текста рядом */
+  .projects-section {
     display: flex;
-    flex-direction: column;
+    gap: 30px;
+    align-items: flex-start;
+    justify-content: center;
+    margin-bottom: 80px;
   }
-  .project-text p {
-    margin-bottom: 20px;
+  /* Видео-слайдер — занимает примерно 80% ширины */
+  .slider {
+    flex: 0 0 80%;
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16 / 9;
+  }
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+  }
+  .slide.active {
+    display: block;
+  }
+  iframe, video {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  /* Текст рядом — занимает около 20% ширины */
+  .project-text {
+    flex: 0 0 20%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
     font-size: 1rem;
     line-height: 1.4;
+    background: rgba(255 255 255 / 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 180px;
   }
-  .controls-vertical {
+  /* Контейнер кнопок — вертикальный */
+  .controls {
     display: flex;
     flex-direction: column;
     gap: 12px;
+    margin-top: 15px;
   }
-  .controls-vertical button {
-    padding: 10px;
-    font-size: 16px;
+  .controls button {
     background: rgba(255,255,255,0.3);
-    color: white;
     border: none;
-    border-radius: 5px;
+    padding: 10px 20px;
+    color: #fff;
+    font-size: 16px;
     cursor: pointer;
+    border-radius: 5px;
     transition: background 0.3s;
   }
-  .controls-vertical button:hover {
+  .controls button:hover {
     background: rgba(255,255,255,0.7);
   }
-  /* Мобильная адаптация */
-  @media (max-width: 600px) {
-    .project-container {
-      flex-direction: column;
-      margin: 20px;
-    }
-    .project-text {
-      margin-top: 20px;
-      flex: none;
-    }
-  }
-  /* Заголовок раздела */
+  /* Заголовок для секции */
   .section-title {
-    margin: 50px 0 20px 0;
+    margin: 50px 0 25px 0;
     font-size: 2rem;
     text-align: center;
     font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
-    width: 100%;
-    max-width: 900px;
+  }
+  /* Адаптив */
+  @media (max-width: 900px) {
+    .projects-section {
+      flex-direction: column;
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+    .slider {
+      flex: 1 1 auto;
+      aspect-ratio: 16 / 9;
+    }
+    .project-text {
+      flex: 1 1 auto;
+      min-width: auto;
+      font-size: 0.95rem;
+      padding: 15px;
+    }
+    .controls {
+      flex-direction: row;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .controls button {
+      flex: 1;
+      padding: 12px 0;
+    }
   }
 </style>
 </head>
@@ -137,38 +175,66 @@
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
 
-  <!-- Новый блок с видео и текстом -->
-  <div class="project-container">
-    <div class="project-video">
-      <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="project-text">
-      <p>Кратко о проекте: Звук для игры Deadside, создание уникальных аудиоэффектов и атмосферы.</p>
-      <div class="controls-vertical">
-        <button id="next">next slide</button>
-        <button id="prev">previous slide</button>
+  <!-- Новый блок с видео-слайдером и текстом справа -->
+  <div class="projects-section">
+
+    <!-- Видео-слайдер -->
+    <div class="slider">
+      <div class="slide active" data-text="Project 1: Sound design for game XYZ. Worked on ambient sounds, UI effects, and dynamic audio.">
+        <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="slide" data-text="Project 2: Created cinematic soundscape for indie film ABC. Focused on mood and atmosphere.">
+        <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="slide" data-text="Project 3: Designed interactive audio for VR experience DEF. Integrated spatial audio and feedback sounds.">
+        <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
+
+    <!-- Текст проекта справа -->
+    <div class="project-text" id="project-text">
+      Project 1: Sound design for game XYZ. Worked on ambient sounds, UI effects, and dynamic audio.
+    </div>
+
+    <!-- Кнопки переключения слайдов вертикально -->
+    <div class="controls">
+      <button id="next">next slide</button>
+      <button id="prev">previous slide</button>
+    </div>
+
   </div>
 
 </div>
 
 <script>
-  // Тут логика для кнопок слайдера
-  const nextBtn = document.getElementById('next');
-  const prevBtn = document.getElementById('prev');
+  // Слайдер
+  const slides = document.querySelectorAll('.slide');
+  const projectText = document.getElementById('project-text');
+  let current = 0;
 
-  nextBtn.addEventListener('click', () => {
-    alert('Next slide clicked');
-    // Здесь вставь свою логику переключения слайдов
+  function showSlide(index) {
+    if(index < 0) index = slides.length - 1;
+    if(index >= slides.length) index = 0;
+
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
+
+    // Обновляем текст из атрибута data-text активного слайда
+    projectText.textContent = slides[index].getAttribute('data-text');
+
+    current = index;
+  }
+
+  document.getElementById('next').addEventListener('click', () => {
+    showSlide(current + 1);
   });
 
-  prevBtn.addEventListener('click', () => {
-    alert('Previous slide clicked');
-    // Здесь вставь свою логику переключения слайдов
+  document.getElementById('prev').addEventListener('click', () => {
+    showSlide(current - 1);
   });
 
-  // Анимация линий на canvas (оставляем без изменений)
+  // Запуск анимации линий на canvas (оставляем как есть)
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -205,6 +271,7 @@
   function draw() {
     ctx.clearRect(0, 0, width, height);
 
+    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -217,6 +284,7 @@
       ctx.fill();
     });
 
+    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
@@ -242,18 +310,21 @@
             points[j].vy += forceY;
           }
 
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+          // Настройки линии
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // белая
           ctx.lineWidth = 1.2;
-          ctx.shadowBlur = 8;
+          ctx.shadowBlur = 8; // свечение
           ctx.shadowColor = 'white';
 
+          // Волновая линия (аудио-эффект)
           ctx.beginPath();
-          let segments = 20;
+          let segments = 20; // количество сегментов волны
           for (let k = 0; k <= segments; k++) {
             let t = k / segments;
             let x = points[i].x + (points[j].x - points[i].x) * t;
             let y = points[i].y + (points[j].y - points[i].y) * t;
 
+            // смещение по синусоиде
             let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
             let perpX = -(points[j].y - points[i].y);
             let perpY = (points[j].x - points[i].x);
@@ -277,6 +348,7 @@
   }
 
   draw();
+
 </script>
 
 </body>
