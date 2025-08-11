@@ -6,7 +6,6 @@
 <title>formersound</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
 <style>
-  /* Сбросы и базовые стили */
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
@@ -17,16 +16,13 @@
     font-family: Arial, sans-serif;
     overflow-x: hidden;
   }
-  /* Холст с анимацией на заднем фоне */
   #canvas {
     position: fixed;
     top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100vw; height: 100vh;
     z-index: 0;
     display: block;
   }
-  /* Контент поверх анимации */
   .content {
     position: relative;
     z-index: 10;
@@ -35,14 +31,12 @@
     align-items: center;
     padding-top: 0;
   }
-  /* Заголовок сверху */
   h1 {
     margin: 50px 0;
     font-size: 2.5rem;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
   }
-  /* Контейнер для видео и текста (рядом) */
   .main-section {
     display: flex;
     max-width: 1100px;
@@ -50,7 +44,6 @@
     gap: 30px;
     margin-bottom: 50px;
   }
-  /* Основное видео */
   .main-video {
     flex: 0 0 80%;
     aspect-ratio: 16 / 9;
@@ -58,7 +51,6 @@
     object-fit: cover;
     background: black;
   }
-  /* Текст и слайды справа */
   .side-block {
     flex: 0 0 20%;
     display: flex;
@@ -67,14 +59,12 @@
     font-size: 16px;
     font-family: Arial, sans-serif;
   }
-  /* Текст под видео */
   .text-block {
     flex-grow: 1;
     overflow-y: auto;
     padding-right: 10px;
     line-height: 1.4;
   }
-  /* Слайдер видео */
   .slider {
     position: relative;
     aspect-ratio: 16 / 9;
@@ -98,7 +88,6 @@
     border-radius: 8px;
     object-fit: cover;
   }
-  /* Кнопки управления слайдером */
   .controls {
     margin-top: 15px;
     display: flex;
@@ -118,7 +107,6 @@
   button:hover {
     background: rgba(255,255,255,0.7);
   }
-  /* Заголовок раздела */
   .section-title {
     margin: 50px 0 20px 0;
     font-size: 2rem;
@@ -126,8 +114,6 @@
     font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
   }
-
-  /* Адаптив для мобильных */
   @media (max-width: 768px) {
     .main-section {
       flex-direction: column;
@@ -175,7 +161,6 @@
   <h1>NICK GERASIMOV SOUND DESIGN</h1>
 
   <div class="main-section">
-    <!-- Главное видео -->
     <iframe
       class="main-video"
       src="https://www.youtube.com/embed/260EdIcqmck?rel=0&modestbranding=1"
@@ -184,7 +169,6 @@
       allowfullscreen
     ></iframe>
 
-    <!-- Текст и слайды справа -->
     <div class="side-block">
 
       <div class="text-block"></div>
@@ -214,21 +198,16 @@
 </div>
 
 <script>
-  // Слайдер
   const slides = document.querySelectorAll('.slide');
   const textBlock = document.querySelector('.text-block');
   let current = 0;
 
   function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-    });
+    slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
     current = index;
-    // Вставляем HTML из data-text
     textBlock.innerHTML = slides[current].dataset.text;
   }
 
-  // Инициализация текста при загрузке
   showSlide(0);
 
   document.getElementById('prev').addEventListener('click', () => {
@@ -239,7 +218,6 @@
     showSlide((current + 1) % slides.length);
   });
 
-  // Анимация линий на canvas
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -276,7 +254,6 @@
   function draw() {
     ctx.clearRect(0, 0, width, height);
 
-    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -289,7 +266,6 @@
       ctx.fill();
     });
 
-    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
