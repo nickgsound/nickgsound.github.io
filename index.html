@@ -49,63 +49,70 @@
     aspect-ratio: 16 / 9;
     height: auto;
   }
-  /* Слайды */
-  .slider {
-    width: 100%;
+  /* Новый блок с видео и текстом */
+  .project-container {
+    display: flex;
     max-width: 900px;
+    width: 100%;
+    gap: 20px;
+    margin-top: 40px;
+  }
+  .project-video {
+    flex: 4; /* около 80% */
+  }
+  .project-video iframe {
+    width: 100%;
     aspect-ratio: 16 / 9;
-    height: auto;
-    background: rgba(0,0,0,0.5);
-    margin-top: 0;
-    position: relative;
-    overflow: hidden;
     border-radius: 8px;
   }
-  .slide {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
+  .project-text {
+    flex: 1; /* около 20% */
+    display: flex;
+    flex-direction: column;
   }
-  .slide.active {
-    display: block;
+  .project-text p {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    line-height: 1.4;
   }
-  video, iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-  /* Вертикальные кнопки */
   .controls-vertical {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 50px;
-    gap: 10px;
+    gap: 12px;
   }
   .controls-vertical button {
-    width: 160px;
-    background: rgba(255,255,255,0.3);
-    border: none;
-    padding: 10px 20px;
-    color: #fff;
+    padding: 10px;
     font-size: 16px;
-    cursor: pointer;
+    background: rgba(255,255,255,0.3);
+    color: white;
+    border: none;
     border-radius: 5px;
+    cursor: pointer;
     transition: background 0.3s;
   }
   .controls-vertical button:hover {
     background: rgba(255,255,255,0.7);
   }
+  /* Мобильная адаптация */
+  @media (max-width: 600px) {
+    .project-container {
+      flex-direction: column;
+      margin: 20px;
+    }
+    .project-text {
+      margin-top: 20px;
+      flex: none;
+    }
+  }
+  /* Заголовок раздела */
   .section-title {
-    margin: 50px 0;
+    margin: 50px 0 20px 0;
     font-size: 2rem;
     text-align: center;
     font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
+    width: 100%;
+    max-width: 900px;
   }
 </style>
 </head>
@@ -130,47 +137,38 @@
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
 
-  <!-- Слайды с видео -->
-  <div class="slider">
-    <div class="slide active">
+  <!-- Новый блок с видео и текстом -->
+  <div class="project-container">
+    <div class="project-video">
       <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
     </div>
-    <div class="slide">
-      <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+    <div class="project-text">
+      <p>Кратко о проекте: Звук для игры Deadside, создание уникальных аудиоэффектов и атмосферы.</p>
+      <div class="controls-vertical">
+        <button id="next">next slide</button>
+        <button id="prev">previous slide</button>
+      </div>
     </div>
-    <div class="slide">
-      <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </div>
-
-  <div class="controls-vertical">
-    <button id="next">next slide</button>
-    <button id="prev">previous slide</button>
   </div>
 
 </div>
 
 <script>
-  // Слайдер
-  const slides = document.querySelectorAll('.slide');
-  let current = 0;
+  // Тут логика для кнопок слайдера
+  const nextBtn = document.getElementById('next');
+  const prevBtn = document.getElementById('prev');
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-    });
-    current = index;
-  }
-
-  document.getElementById('prev').addEventListener('click', () => {
-    showSlide((current - 1 + slides.length) % slides.length);
+  nextBtn.addEventListener('click', () => {
+    alert('Next slide clicked');
+    // Здесь вставь свою логику переключения слайдов
   });
 
-  document.getElementById('next').addEventListener('click', () => {
-    showSlide((current + 1) % slides.length);
+  prevBtn.addEventListener('click', () => {
+    alert('Previous slide clicked');
+    // Здесь вставь свою логику переключения слайдов
   });
 
-  // Анимация линий на canvas
+  // Анимация линий на canvas (оставляем без изменений)
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -207,7 +205,6 @@
   function draw() {
     ctx.clearRect(0, 0, width, height);
 
-    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -220,7 +217,6 @@
       ctx.fill();
     });
 
-    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
@@ -246,13 +242,11 @@
             points[j].vy += forceY;
           }
 
-          // Настройки линии
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // белая
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
           ctx.lineWidth = 1.2;
           ctx.shadowBlur = 8;
           ctx.shadowColor = 'white';
 
-          // Волновая линия (аудио-эффект)
           ctx.beginPath();
           let segments = 20;
           for (let k = 0; k <= segments; k++) {
