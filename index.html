@@ -14,7 +14,7 @@
     height: 100%;
     background: #111;
     color: #fff;
-    font-family: Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif; /* ОБНОВЛЕНО: теперь монстерат везде */
     overflow-x: hidden;
   }
   /* Холст с анимацией на заднем фоне */
@@ -40,7 +40,7 @@
     margin: 50px 0;
     font-size: 2.5rem;
     text-align: center;
-    font-family: 'Montserrat', sans-serif;
+    /* font-family: 'Montserrat', sans-serif; — не нужно, наследуется */
   }
   /* Главное видео */
   .main-video {
@@ -54,7 +54,6 @@
     margin: 50px 0;
     font-size: 2rem;
     text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
   }
 
@@ -68,17 +67,21 @@
     width: 100%;
     max-width: 1100px;
   }
-  .project-text {
+  .left-side {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* расстояние между текстом и кнопками */
     flex: 0 0 25%;
-    font-family: 'Montserrat', sans-serif;
+    min-width: 200px;
+  }
+  .project-text {
     font-weight: 600;
     font-size: 1rem;
     line-height: 1.4;
     background: rgba(255 255 255 / 0.05);
     padding: 20px;
     border-radius: 8px;
-    min-width: 200px;
-    white-space: pre-wrap; /* Вот это добавлено */
+    white-space: pre-wrap; /* сохранено */
   }
   .slider {
     flex: 0 0 65%;
@@ -105,12 +108,11 @@
     object-fit: cover;
   }
 
-  /* Вертикальные кнопки справа от слайдера */
+  /* Кнопки под текстом слева */
   .controls {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-left: 20px;
   }
   .controls button {
     background: rgba(255,255,255,0.3);
@@ -122,6 +124,7 @@
     border-radius: 5px;
     transition: background 0.3s;
     width: 140px;
+    font-family: 'Montserrat', sans-serif;
   }
   .controls button:hover {
     background: rgba(255,255,255,0.7);
@@ -133,17 +136,15 @@
       flex-direction: column;
       align-items: center;
     }
-    .project-text, .slider {
+    .left-side, .slider {
       flex: none;
       width: 90%;
       min-width: unset;
     }
     .controls {
       flex-direction: row;
-      margin-left: 0;
-      margin-top: 20px;
-      gap: 20px;
       justify-content: center;
+      gap: 20px;
       width: 100%;
     }
     .controls button {
@@ -177,12 +178,20 @@
   <!-- Секция с текстом слева и видео-слайдером справа -->
   <div class="projects-section">
 
-    <!-- Текст проекта -->
-    <div class="project-text" id="project-text">
-      Project 1:
+    <!-- Левая колонка с текстом и кнопками -->
+    <div class="left-side">
+      <div class="project-text" id="project-text">
+        Project 1:
 - Sound design for game XYZ
 - Worked on ambient sounds
 - UI effects and dynamic audio.
+      </div>
+
+      <!-- Кнопки под текстом -->
+      <div class="controls">
+        <button id="next">next slide</button>
+        <button id="prev">previous slide</button>
+      </div>
     </div>
 
     <!-- Видео-слайдер -->
@@ -206,12 +215,6 @@
 - Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)">
         <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
       </div>
-    </div>
-
-    <!-- Кнопки переключения слайдов -->
-    <div class="controls">
-      <button id="next">next slide</button>
-      <button id="prev">previous slide</button>
     </div>
 
   </div>
