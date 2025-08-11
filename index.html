@@ -6,7 +6,6 @@
 <title>formersound</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
 <style>
-  /* Сбросы и базовые стили */
   * {
     margin: 0; padding: 0; box-sizing: border-box;
   }
@@ -17,7 +16,6 @@
     font-family: Arial, sans-serif;
     overflow-x: hidden;
   }
-  /* Холст с анимацией на заднем фоне */
   #canvas {
     position: fixed;
     top: 0; left: 0;
@@ -26,62 +24,74 @@
     z-index: 0;
     display: block;
   }
-  /* Контент поверх анимации */
   .content {
     position: relative;
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding-top: 0;
   }
-  /* Заголовок сверху */
   h1 {
     margin: 50px 0;
     font-size: 2.5rem;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
   }
-  /* Главное видео */
   .main-video {
-  width: 100%;
-  max-width: 900px; /* ограничение для больших экранов */
-  aspect-ratio: 16 / 9; /* сохраняем пропорции */
-  height: auto; /* браузер сам высчитает высоту */
-  }
-  /* Слайды */
-  .slider {
     width: 100%;
-    max-width: 900px; /* ограничение для больших экранов */
-    aspect-ratio: 16 / 9; /* сохраняем пропорции */
-    height: auto; /* браузер сам высчитает высоту */
-    background: rgba(0,0,0,0.5);
-    margin-top: 0; /* Убрали верхний отступ */
-    position: relative; /* важно для абсолютного позиционирования слайдов */
-    overflow: hidden;   /* скрыть неактивные слайды за пределами контейнера */
-    border-radius: 8px;
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    height: auto;
   }
-  .slide {
-  position: absolute; /* накладываем слайды друг на друга */
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* чтобы iframe занимал весь контейнер */
-  display: none;
+  .section-title {
+    margin: 50px 0;
+    font-size: 2rem;
+    text-align: center;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
   }
-  .slide.active {
-    display: block;
+
+  /* Новый адаптивный блок видео + текст */
+  .project-view {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
   }
-  video, iframe {
+  .project-text {
+    flex: 1 1 300px;
+    min-width: 250px;
+  }
+  .project-video {
+    flex: 1 1 300px;
+    aspect-ratio: 16/9;
+  }
+  .project-video iframe {
     width: 100%;
     height: 100%;
     border-radius: 8px;
-    object-fit: cover;
   }
+  @media (max-width: 768px) {
+    .project-view {
+      flex-direction: column;
+      text-align: center;
+    }
+    .project-text {
+      order: 2;
+    }
+    .project-video {
+      order: 1;
+      width: 100%;
+    }
+  }
+
   .controls {
     margin-top: 20px;
     text-align: center;
-    margin-bottom: 50px; /* Нижний отступ под кнопками */
+    margin-bottom: 50px;
   }
   button {
     background: rgba(255,255,255,0.3);
@@ -97,26 +107,15 @@
   button:hover {
     background: rgba(255,255,255,0.7);
   }
-  .section-title {
-    margin: 50px 0; /* Ровные отступы сверху и снизу */
-    font-size: 2rem; /* чуть меньше чем у h1 */
-    text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif; /* чтобы шрифт совпадал */
-    font-weight: 600;
-  }
 </style>
 </head>
 <body>
 
-<!-- Canvas для анимации линий -->
 <canvas id="canvas"></canvas>
 
 <div class="content">
-
-  <!-- Заголовок сверху -->
   <h1>NICK GERASIMOV SOUND DESIGN</h1>
 
-  <!-- Главное видео заменено на YouTube iframe без автоплея -->
   <iframe
     class="main-video"
     src="https://www.youtube.com/embed/260EdIcqmck?rel=0&modestbranding=1"
@@ -127,58 +126,63 @@
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
 
-  <!-- Слайды с видео -->
-  <div class="slider">
-    <div class="slide active">
-      <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+  <!-- Новый блок -->
+  <div class="project-view">
+    <div class="project-text">
+      <h3 id="project-title"></h3>
+      <p id="project-description"></p>
     </div>
-    <div class="slide">
-      <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <div class="slide">
-      <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+    <div class="project-video">
+      <iframe id="project-video" frameborder="0" allowfullscreen></iframe>
     </div>
   </div>
 
   <div class="controls">
-    <button id="prev">previous slide</button>
-    <button id="next">next slide</button>
+    <button id="prev">previous</button>
+    <button id="next">next</button>
   </div>
-
 </div>
 
 <script>
-  // Слайдер
-  const slides = document.querySelectorAll('.slide');
-  let current = 0;
+  const slidesData = [
+    {
+      video: "https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1",
+      title: "Deadside",
+      description: "Sound design: оружие, окружение, UI, амбиент."
+    },
+    {
+      video: "https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1",
+      title: "Cyber Game",
+      description: "Sound design: футуристические эффекты, интерфейсы, атмосфера."
+    },
+    {
+      video: "https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1",
+      title: "Horror Project",
+      description: "Sound design: скримеры, атмосферные звуки, 3D-позиционирование."
+    }
+  ];
 
+  let currentSlide = 0;
   function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-
-      if(i !== index){
-        const iframe = slide.querySelector('iframe');
-        if(iframe){
-          // Перезагрузим iframe, чтобы остановить видео
-        }
-      }
-    });
-    current = index;
+    const data = slidesData[index];
+    document.getElementById("project-video").src = data.video;
+    document.getElementById("project-title").textContent = data.title;
+    document.getElementById("project-description").textContent = data.description;
   }
-
-  document.getElementById('prev').addEventListener('click', () => {
-    showSlide((current - 1 + slides.length) % slides.length);
+  document.getElementById("prev").addEventListener("click", () => {
+    currentSlide = (currentSlide - 1 + slidesData.length) % slidesData.length;
+    showSlide(currentSlide);
   });
-
-  document.getElementById('next').addEventListener('click', () => {
-    showSlide((current + 1) % slides.length);
+  document.getElementById("next").addEventListener("click", () => {
+    currentSlide = (currentSlide + 1) % slidesData.length;
+    showSlide(currentSlide);
   });
+  showSlide(currentSlide);
 
-  // Анимация линий на canvas
+  // Анимация точек со звуковыми линиями
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
-
   function resize() {
     width = window.innerWidth;
     height = window.innerHeight;
@@ -191,40 +195,33 @@
   const points = [];
   const pointCount = 30;
   const maxDistance = 150;
-
-  for(let i=0; i<pointCount; i++) {
+  for (let i = 0; i < pointCount; i++) {
     points.push({
-      x: Math.random()*width,
-      y: Math.random()*height,
-      vx: (Math.random()-0.5)*0.5,
-      vy: (Math.random()-0.5)*0.5,
+      x: Math.random() * width,
+      y: Math.random() * height,
+      vx: (Math.random() - 0.5) * 0.5,
+      vy: (Math.random() - 0.5) * 0.5,
     });
   }
-
-  let mouse = {x: width/2, y: height/2};
-
+  let mouse = { x: width / 2, y: height / 2 };
   window.addEventListener('mousemove', e => {
     mouse.x = e.clientX;
     mouse.y = e.clientY;
   });
 
- function draw() {
+  function draw() {
     ctx.clearRect(0, 0, width, height);
-
-    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
       if (p.x < 0 || p.x > width) p.vx *= -1;
       if (p.y < 0 || p.y > height) p.vy *= -1;
-
       ctx.beginPath();
       ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
       ctx.fillStyle = '#fff';
       ctx.fill();
     });
 
-    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
@@ -233,7 +230,6 @@
 
         if (dist < maxDistance) {
           let alpha = 1 - dist / maxDistance;
-
           let midX = (points[i].x + points[j].x) / 2;
           let midY = (points[i].y + points[j].y) / 2;
           let mdx = mouse.x - midX;
@@ -250,21 +246,18 @@
             points[j].vy += forceY;
           }
 
-          // Настройки линии
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // белая
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
           ctx.lineWidth = 1.2;
-          ctx.shadowBlur = 8; // свечение
+          ctx.shadowBlur = 8;
           ctx.shadowColor = 'white';
 
-          // Волновая линия (аудио-эффект)
           ctx.beginPath();
-          let segments = 20; // количество сегментов волны
+          let segments = 20;
           for (let k = 0; k <= segments; k++) {
             let t = k / segments;
             let x = points[i].x + (points[j].x - points[i].x) * t;
             let y = points[i].y + (points[j].y - points[i].y) * t;
 
-            // смещение по синусоиде
             let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
             let perpX = -(points[j].y - points[i].y);
             let perpY = (points[j].x - points[i].x);
@@ -278,15 +271,12 @@
             if (k === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           }
-
           ctx.stroke();
         }
       }
     }
-
     requestAnimationFrame(draw);
   }
-
   draw();
 </script>
 
