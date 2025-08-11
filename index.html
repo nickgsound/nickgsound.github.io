@@ -42,174 +42,181 @@
     text-align: center;
     font-family: 'Montserrat', sans-serif;
   }
-  /* Главное видео */
-  .main-video {
-    width: 100%;
-    max-width: 900px;
-    aspect-ratio: 16 / 9;
-    height: auto;
+  /* Контейнер для видео и текста (рядом) */
+  .main-section {
+    display: flex;
+    max-width: 1100px;
+    width: 90vw;
+    gap: 30px;
+    margin-bottom: 50px;
   }
-  /* Заголовок для секции */
+  /* Основное видео */
+  .main-video {
+    flex: 0 0 80%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    object-fit: cover;
+    background: black;
+  }
+  /* Текст и слайды справа */
+  .side-block {
+    flex: 0 0 20%;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+  }
+  /* Текст под видео */
+  .text-block {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+    line-height: 1.4;
+  }
+  /* Слайдер видео */
+  .slider {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    margin-top: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.5);
+  }
+  .slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: none;
+  }
+  .slide.active {
+    display: block;
+  }
+  .slide iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+  /* Кнопки управления слайдером */
+  .controls {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  button {
+    background: rgba(255,255,255,0.3);
+    border: none;
+    padding: 8px 12px;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+  button:hover {
+    background: rgba(255,255,255,0.7);
+  }
+  /* Заголовок раздела */
   .section-title {
-    margin: 50px 0;
+    margin: 50px 0 20px 0;
     font-size: 2rem;
     text-align: center;
     font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
   }
 
-  /* Новая секция с текстом и слайдером */
-  .projects-section {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-    justify-content: center;
-    margin-bottom: 80px;
-    width: 100%;
-    max-width: 1100px;
-  }
-  .project-text {
-    flex: 0 0 25%;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.4;
-    background: rgba(255 255 255 / 0.05);
-    padding: 20px;
-    border-radius: 8px;
-    min-width: 200px;
-  }
-  .slider {
-    flex: 0 0 65%;
-    background: rgba(0,0,0,0.5);
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-    aspect-ratio: 16 / 9;
-  }
-  .slide {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-  }
-  .slide.active {
-    display: block;
-  }
-  video, iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-  /* Вертикальные кнопки справа от слайдера */
-  .controls {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-left: 20px;
-  }
-  .controls button {
-    background: rgba(255,255,255,0.3);
-    border: none;
-    padding: 10px 20px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s;
-    width: 140px;
-  }
-  .controls button:hover {
-    background: rgba(255,255,255,0.7);
-  }
-
-  /* Адаптив */
-  @media (max-width: 900px) {
-    .projects-section {
+  /* Адаптив для мобильных */
+  @media (max-width: 768px) {
+    .main-section {
       flex-direction: column;
-      align-items: center;
+      width: 95vw;
     }
-    .project-text, .slider {
+    .main-video {
       flex: none;
-      width: 90%;
-      min-width: unset;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    .side-block {
+      flex: none;
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 20px;
+    }
+    .text-block {
+      flex-grow: 1;
+      padding-right: 0;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    .slider {
+      flex: none;
+      width: 150px;
+      height: 84px;
+      margin-top: 0;
     }
     .controls {
       flex-direction: row;
-      margin-left: 0;
-      margin-top: 20px;
-      gap: 20px;
-      justify-content: center;
-      width: 100%;
-    }
-    .controls button {
-      width: auto;
-      flex: 1;
+      gap: 10px;
+      margin-top: 10px;
     }
   }
 </style>
 </head>
 <body>
 
-<!-- Canvas для анимации линий -->
 <canvas id="canvas"></canvas>
 
 <div class="content">
 
-  <!-- Заголовок сверху -->
   <h1>NICK GERASIMOV SOUND DESIGN</h1>
 
-  <!-- Главное видео -->
-  <iframe
-    class="main-video"
-    src="https://www.youtube.com/embed/260EdIcqmck?rel=0&modestbranding=1"
-    frameborder="0"
-    allow="encrypted-media"
-    allowfullscreen
-  ></iframe>
+  <div class="main-section">
+    <!-- Главное видео -->
+    <iframe
+      class="main-video"
+      src="https://www.youtube.com/embed/260EdIcqmck?rel=0&modestbranding=1"
+      frameborder="0"
+      allow="encrypted-media"
+      allowfullscreen
+    ></iframe>
+
+    <!-- Текст и слайды справа -->
+    <div class="side-block">
+
+      <div class="text-block"></div>
+
+      <div class="slider">
+        <div class="slide active" data-text="World of Warships:<ul><li>Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)</li><li>Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)</li><li>Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms</li><li>Collaborated with cross-disciplinary teams using Jira and Git version control</li></ul>">
+          <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="slide" data-text="Neodash (Axan Grey):<ul><li>Lead Sound Designer for high-energy, rhythm-synced audio in Unreal Engine 4</li><li>Designed dynamic environmental sound responsive to gameplay and music</li><li>Integrated reactive audio systems enhancing player immersion</li></ul>">
+          <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+        </div>
+        <div class="slide" data-text="Deadside:<ul><li>Lead Sound Designer responsible for weapon, vehicle, and environmental audio</li><li>Developed Impulse Response Reverberation system for realistic spatial soundscapes</li><li>Managed audio asset curation and workflow optimization in Unreal Engine</li></ul>">
+          <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="next">next slide</button>
+        <button id="prev">previous slide</button>
+      </div>
+
+    </div>
+  </div>
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
-
-  <!-- Секция с текстом слева и видео-слайдером справа -->
-  <div class="projects-section">
-
-    <!-- Текст проекта -->
-    <div class="project-text" id="project-text">
-      Project 1:
-      - a
-      - b
-    </div>
-
-    <!-- Видео-слайдер -->
-    <div class="slider">
-      <div class="slide active" data-text="Project 1: Sound design for game XYZ. Worked on ambient sounds, UI effects, and dynamic audio.">
-        <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="slide" data-text="Project 2: Created cinematic soundscape for indie film ABC. Focused on mood and atmosphere.">
-        <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="slide" data-text="Project 3: Designed interactive audio for VR experience DEF. Integrated spatial audio and feedback sounds.">
-        <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-
-    <!-- Кнопки переключения слайдов -->
-    <div class="controls">
-      <button id="next">next slide</button>
-      <button id="prev">previous slide</button>
-    </div>
-
-  </div>
 
 </div>
 
 <script>
   // Слайдер
   const slides = document.querySelectorAll('.slide');
-  const projectText = document.getElementById('project-text');
+  const textBlock = document.querySelector('.text-block');
   let current = 0;
 
   function showSlide(index) {
@@ -217,12 +224,12 @@
       slide.classList.toggle('active', i === index);
     });
     current = index;
-    // Обновляем текст слева по data-text активного слайда
-    const activeSlide = slides[current];
-    if(activeSlide) {
-      projectText.textContent = activeSlide.dataset.text || '';
-    }
+    // Вставляем HTML из data-text
+    textBlock.innerHTML = slides[current].dataset.text;
   }
+
+  // Инициализация текста при загрузке
+  showSlide(0);
 
   document.getElementById('prev').addEventListener('click', () => {
     showSlide((current - 1 + slides.length) % slides.length);
@@ -231,9 +238,6 @@
   document.getElementById('next').addEventListener('click', () => {
     showSlide((current + 1) % slides.length);
   });
-
-  // Инициализация текста при загрузке
-  showSlide(current);
 
   // Анимация линий на canvas
   const canvas = document.getElementById('canvas');
@@ -272,6 +276,7 @@
   function draw() {
     ctx.clearRect(0, 0, width, height);
 
+    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -284,6 +289,7 @@
       ctx.fill();
     });
 
+    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
@@ -311,38 +317,15 @@
 
           ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
           ctx.lineWidth = 1.2;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = 'white';
-
           ctx.beginPath();
-          let segments = 20;
-          for (let k = 0; k <= segments; k++) {
-            let t = k / segments;
-            let x = points[i].x + (points[j].x - points[i].x) * t;
-            let y = points[i].y + (points[j].y - points[i].y) * t;
-
-            let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
-            let perpX = -(points[j].y - points[i].y);
-            let perpY = (points[j].x - points[i].x);
-            let len = Math.sqrt(perpX * perpX + perpY * perpY);
-            perpX /= len;
-            perpY /= len;
-
-            x += perpX * offset;
-            y += perpY * offset;
-
-            if (k === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-
+          ctx.moveTo(points[i].x, points[i].y);
+          ctx.lineTo(points[j].x, points[j].y);
           ctx.stroke();
         }
       }
     }
-
     requestAnimationFrame(draw);
   }
-
   draw();
 </script>
 
