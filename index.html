@@ -30,13 +30,14 @@
   .content {
     position: relative;
     z-index: 10;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 0;
   }
   /* Заголовок сверху */
   h1 {
-    margin: 50px 0 40px 0;
+    margin: 50px 0;
     font-size: 2.5rem;
     text-align: center;
     font-family: 'Montserrat', sans-serif;
@@ -47,21 +48,39 @@
     max-width: 900px;
     aspect-ratio: 16 / 9;
     height: auto;
-    margin: 0 auto 60px auto;
-    display: block;
-    border-radius: 8px;
   }
-  /* Секция слайдера и текста рядом */
+  /* Заголовок для секции */
+  .section-title {
+    margin: 50px 0;
+    font-size: 2rem;
+    text-align: center;
+    font-family: 'Montserrat', Arial, sans-serif;
+    font-weight: 600;
+  }
+
+  /* Новая секция с текстом и слайдером */
   .projects-section {
     display: flex;
     gap: 30px;
     align-items: flex-start;
     justify-content: center;
     margin-bottom: 80px;
+    width: 100%;
+    max-width: 1100px;
   }
-  /* Видео-слайдер — занимает примерно 80% ширины */
+  .project-text {
+    flex: 0 0 25%;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.4;
+    background: rgba(255 255 255 / 0.05);
+    padding: 20px;
+    border-radius: 8px;
+    min-width: 200px;
+  }
   .slider {
-    flex: 0 0 80%;
+    flex: 0 0 65%;
     background: rgba(0,0,0,0.5);
     border-radius: 8px;
     overflow: hidden;
@@ -78,30 +97,19 @@
   .slide.active {
     display: block;
   }
-  iframe, video {
+  video, iframe {
     width: 100%;
     height: 100%;
     border-radius: 8px;
     object-fit: cover;
   }
-  /* Текст рядом — занимает около 20% ширины */
-  .project-text {
-    flex: 0 0 20%;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.4;
-    background: rgba(255 255 255 / 0.05);
-    padding: 20px;
-    border-radius: 8px;
-    min-width: 180px;
-  }
-  /* Контейнер кнопок — вертикальный */
+
+  /* Вертикальные кнопки справа от слайдера */
   .controls {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 15px;
+    margin-left: 20px;
   }
   .controls button {
     background: rgba(255,255,255,0.3);
@@ -112,44 +120,34 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background 0.3s;
+    width: 140px;
   }
   .controls button:hover {
     background: rgba(255,255,255,0.7);
   }
-  /* Заголовок для секции */
-  .section-title {
-    margin: 50px 0 25px 0;
-    font-size: 2rem;
-    text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif;
-    font-weight: 600;
-  }
+
   /* Адаптив */
   @media (max-width: 900px) {
     .projects-section {
       flex-direction: column;
-      gap: 25px;
-      margin-bottom: 40px;
+      align-items: center;
     }
-    .slider {
-      flex: 1 1 auto;
-      aspect-ratio: 16 / 9;
-    }
-    .project-text {
-      flex: 1 1 auto;
-      min-width: auto;
-      font-size: 0.95rem;
-      padding: 15px;
+    .project-text, .slider {
+      flex: none;
+      width: 90%;
+      min-width: unset;
     }
     .controls {
       flex-direction: row;
-      justify-content: center;
-      gap: 15px;
+      margin-left: 0;
       margin-top: 20px;
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
     }
     .controls button {
+      width: auto;
       flex: 1;
-      padding: 12px 0;
     }
   }
 </style>
@@ -175,8 +173,13 @@
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
 
-  <!-- Новый блок с видео-слайдером и текстом справа -->
+  <!-- Секция с текстом слева и видео-слайдером справа -->
   <div class="projects-section">
+
+    <!-- Текст проекта -->
+    <div class="project-text" id="project-text">
+      Project 1: Sound design for game XYZ. Worked on ambient sounds, UI effects, and dynamic audio.
+    </div>
 
     <!-- Видео-слайдер -->
     <div class="slider">
@@ -191,12 +194,7 @@
       </div>
     </div>
 
-    <!-- Текст проекта справа -->
-    <div class="project-text" id="project-text">
-      Project 1: Sound design for game XYZ. Worked on ambient sounds, UI effects, and dynamic audio.
-    </div>
-
-    <!-- Кнопки переключения слайдов вертикально -->
+    <!-- Кнопки переключения слайдов -->
     <div class="controls">
       <button id="next">next slide</button>
       <button id="prev">previous slide</button>
@@ -213,28 +211,29 @@
   let current = 0;
 
   function showSlide(index) {
-    if(index < 0) index = slides.length - 1;
-    if(index >= slides.length) index = 0;
-
     slides.forEach((slide, i) => {
       slide.classList.toggle('active', i === index);
     });
-
-    // Обновляем текст из атрибута data-text активного слайда
-    projectText.textContent = slides[index].getAttribute('data-text');
-
     current = index;
+    // Обновляем текст слева по data-text активного слайда
+    const activeSlide = slides[current];
+    if(activeSlide) {
+      projectText.textContent = activeSlide.dataset.text || '';
+    }
   }
 
-  document.getElementById('next').addEventListener('click', () => {
-    showSlide(current + 1);
-  });
-
   document.getElementById('prev').addEventListener('click', () => {
-    showSlide(current - 1);
+    showSlide((current - 1 + slides.length) % slides.length);
   });
 
-  // Запуск анимации линий на canvas (оставляем как есть)
+  document.getElementById('next').addEventListener('click', () => {
+    showSlide((current + 1) % slides.length);
+  });
+
+  // Инициализация текста при загрузке
+  showSlide(current);
+
+  // Анимация линий на canvas
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -271,7 +270,6 @@
   function draw() {
     ctx.clearRect(0, 0, width, height);
 
-    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -284,7 +282,6 @@
       ctx.fill();
     });
 
-    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
@@ -310,21 +307,18 @@
             points[j].vy += forceY;
           }
 
-          // Настройки линии
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // белая
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
           ctx.lineWidth = 1.2;
-          ctx.shadowBlur = 8; // свечение
+          ctx.shadowBlur = 8;
           ctx.shadowColor = 'white';
 
-          // Волновая линия (аудио-эффект)
           ctx.beginPath();
-          let segments = 20; // количество сегментов волны
+          let segments = 20;
           for (let k = 0; k <= segments; k++) {
             let t = k / segments;
             let x = points[i].x + (points[j].x - points[i].x) * t;
             let y = points[i].y + (points[j].y - points[i].y) * t;
 
-            // смещение по синусоиде
             let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
             let perpX = -(points[j].y - points[i].y);
             let perpY = (points[j].x - points[i].x);
@@ -348,7 +342,6 @@
   }
 
   draw();
-
 </script>
 
 </body>
