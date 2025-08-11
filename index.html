@@ -14,7 +14,7 @@
     height: 100%;
     background: #111;
     color: #fff;
-    font-family: 'Montserrat', sans-serif; /* ОБНОВЛЕНО: теперь монстерат везде */
+    font-family: 'Montserrat', Arial, sans-serif;
     overflow-x: hidden;
   }
   /* Холст с анимацией на заднем фоне */
@@ -40,7 +40,7 @@
     margin: 50px 0;
     font-size: 2.5rem;
     text-align: center;
-    /* font-family: 'Montserrat', sans-serif; — не нужно, наследуется */
+    font-family: 'Montserrat', sans-serif;
   }
   /* Главное видео */
   .main-video {
@@ -54,6 +54,7 @@
     margin: 50px 0;
     font-size: 2rem;
     text-align: center;
+    font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
   }
 
@@ -67,21 +68,22 @@
     width: 100%;
     max-width: 1100px;
   }
-  .left-side {
-    display: flex;
-    flex-direction: column;
-    gap: 20px; /* расстояние между текстом и кнопками */
-    flex: 0 0 25%;
-    min-width: 200px;
-  }
   .project-text {
+    flex: 0 0 25%;
+    font-family: 'Montserrat', sans-serif;
     font-weight: 600;
     font-size: 1rem;
     line-height: 1.4;
     background: rgba(255 255 255 / 0.05);
     padding: 20px;
     border-radius: 8px;
-    white-space: pre-wrap; /* сохранено */
+    min-width: 200px;
+    white-space: pre-wrap;
+  }
+  .project-text strong {
+    display: block;
+    margin-bottom: 8px; /* Отступ между заголовком и текстом */
+    font-weight: 700;
   }
   .slider {
     flex: 0 0 65%;
@@ -111,8 +113,9 @@
   /* Кнопки под текстом слева */
   .controls {
     display: flex;
-    flex-direction: column;
     gap: 12px;
+    margin-top: 20px;
+    justify-content: flex-start;
   }
   .controls button {
     background: rgba(255,255,255,0.3);
@@ -123,11 +126,18 @@
     cursor: pointer;
     border-radius: 5px;
     transition: background 0.3s;
-    width: 140px;
     font-family: 'Montserrat', sans-serif;
   }
   .controls button:hover {
     background: rgba(255,255,255,0.7);
+  }
+
+  /* Для кнопок: previous слева от next */
+  .controls button#prev {
+    order: 0;
+  }
+  .controls button#next {
+    order: 1;
   }
 
   /* Адаптив */
@@ -136,20 +146,14 @@
       flex-direction: column;
       align-items: center;
     }
-    .left-side, .slider {
+    .project-text, .slider {
       flex: none;
       width: 90%;
       min-width: unset;
     }
     .controls {
-      flex-direction: row;
       justify-content: center;
-      gap: 20px;
       width: 100%;
-    }
-    .controls button {
-      width: auto;
-      flex: 1;
     }
   }
 </style>
@@ -178,41 +182,29 @@
   <!-- Секция с текстом слева и видео-слайдером справа -->
   <div class="projects-section">
 
-    <!-- Левая колонка с текстом и кнопками -->
-    <div class="left-side">
+    <!-- Текст проекта + кнопки -->
+    <div style="display: flex; flex-direction: column;">
       <div class="project-text" id="project-text">
-        Project 1:
-- Sound design for game XYZ
-- Worked on ambient sounds
-- UI effects and dynamic audio.
+        <strong>Project 1:</strong>
+        - Sound design for game XYZ<br>
+        - Worked on ambient sounds<br>
+        - UI effects and dynamic audio.
       </div>
-
-      <!-- Кнопки под текстом -->
       <div class="controls">
-        <button id="next">next slide</button>
         <button id="prev">previous slide</button>
+        <button id="next">next slide</button>
       </div>
     </div>
 
     <!-- Видео-слайдер -->
     <div class="slider">
-      <div class="slide active" data-text="Deadside:
-- Lead Sound Designer responsible for weapon, vehicle, and environmental audio
-- Developed Impulse Response Reverberation system for realistic spatial soundscapes
-- Managed audio asset curation and workflow optimization in Unreal Engine">
+      <div class="slide active" data-text="<strong>Deadside:</strong><br>- Lead Sound Designer responsible for weapon, vehicle, and environmental audio<br>- Developed Impulse Response Reverberation system for realistic spatial soundscapes<br>- Managed audio asset curation and workflow optimization in Unreal Engine">
         <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
       </div>
-      <div class="slide" data-text="Neodash:
-- Lead Sound Designer for high-energy, rhythm-synced audio in Unreal Engine 4
-- Integrated reactive audio systems enhancing player immersion
-- Designed dynamic environmental sound responsive to gameplay and music">
+      <div class="slide" data-text="<strong>Neodash:</strong><br>- Lead Sound Designer for high-energy, rhythm-synced audio in Unreal Engine 4<br>- Integrated reactive audio systems enhancing player immersion<br>- Designed dynamic environmental sound responsive to gameplay and music">
         <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
       </div>
-      <div class="slide" data-text="World of Warships:
-- Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)
-- Collaborated with cross-disciplinary teams using Jira and Git version control
-- Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms
-- Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)">
+      <div class="slide" data-text="<strong>World of Warships:</strong><br>- Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)<br>- Collaborated with cross-disciplinary teams using Jira and Git version control<br>- Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms<br>- Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)">
         <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
@@ -232,10 +224,10 @@
       slide.classList.toggle('active', i === index);
     });
     current = index;
-    // Обновляем текст слева по data-text активного слайда
+    // Обновляем HTML текста слева из data-text активного слайда
     const activeSlide = slides[current];
     if(activeSlide) {
-      projectText.textContent = activeSlide.dataset.text || '';
+      projectText.innerHTML = activeSlide.dataset.text || '';
     }
   }
 
