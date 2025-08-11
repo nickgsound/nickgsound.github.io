@@ -45,28 +45,27 @@
   /* Главное видео */
   .main-video {
     width: 100%;
-    max-width: 900px; /* ограничение для больших экранов */
-    aspect-ratio: 16 / 9; /* сохраняем пропорции */
-    height: auto; /* браузер сам высчитает высоту */
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    height: auto;
   }
   /* Слайды */
   .slider {
     width: 100%;
-    max-width: 900px; /* ограничение для больших экранов */
-    aspect-ratio: 16 / 9; /* сохраняем пропорции */
-    height: auto; /* браузер сам высчитает высоту */
+    max-width: 900px;
+    aspect-ratio: 16 / 9;
+    height: auto;
     background: rgba(0,0,0,0.5);
-    margin-top: 0; /* Убрали верхний отступ */
-    position: relative; /* важно для абсолютного позиционирования слайдов */
-    overflow: hidden;   /* скрыть неактивные слайды за пределами контейнера */
+    margin-top: 0;
+    position: relative;
+    overflow: hidden;
     border-radius: 8px;
   }
   .slide {
-    position: absolute; /* накладываем слайды друг на друга */
-    top: 0;
-    left: 0;
+    position: absolute;
+    top: 0; left: 0;
     width: 100%;
-    height: 100%; /* чтобы iframe занимал весь контейнер */
+    height: 100%;
     display: none;
   }
   .slide.active {
@@ -78,77 +77,35 @@
     border-radius: 8px;
     object-fit: cover;
   }
-  .controls {
+  /* Вертикальные кнопки */
+  .controls-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     margin-top: 20px;
-    text-align: center;
-    margin-bottom: 50px; /* Нижний отступ под кнопками */
+    margin-bottom: 50px;
+    gap: 10px;
   }
-  button {
+  .controls-vertical button {
+    width: 160px;
     background: rgba(255,255,255,0.3);
     border: none;
     padding: 10px 20px;
-    margin: 0 10px;
     color: #fff;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
     transition: background 0.3s;
   }
-  button:hover {
+  .controls-vertical button:hover {
     background: rgba(255,255,255,0.7);
   }
   .section-title {
-    margin: 50px 0; /* Ровные отступы сверху и снизу */
-    font-size: 2rem; /* чуть меньше чем у h1 */
+    margin: 50px 0;
+    font-size: 2rem;
     text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif; /* чтобы шрифт совпадал */
+    font-family: 'Montserrat', Arial, sans-serif;
     font-weight: 600;
-  }
-
-  /* Новый блок с текстом + слайдером */
-  .project-detail {
-    display: flex;
-    gap: 20px;
-    max-width: 1200px;
-    width: 100%;
-    margin: 60px auto 80px;
-    padding: 0 20px;
-  }
-  .project-text {
-    flex: 0 0 20%;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1rem;
-    line-height: 1.5;
-    padding-top: 20px;
-  }
-  .project-slider {
-    flex: 1 1 75%;
-    position: relative;
-    background: rgba(0,0,0,0.5);
-    border-radius: 8px;
-    overflow: hidden;
-    aspect-ratio: 16 / 9;
-  }
-
-  /* Адаптив для мобилок */
-  @media (max-width: 768px) {
-    .project-detail {
-      flex-direction: column;
-      margin: 40px 10px 60px;
-    }
-    .project-text {
-      flex: none;
-      width: 100%;
-      padding-top: 0;
-      margin-bottom: 20px;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-    .project-slider {
-      flex: none;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-    }
   }
 </style>
 </head>
@@ -173,7 +130,7 @@
 
   <h2 class="section-title">Featured Sound Design Projects</h2>
 
-  <!-- Основной слайдер -->
+  <!-- Слайды с видео -->
   <div class="slider">
     <div class="slide active">
       <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
@@ -186,39 +143,16 @@
     </div>
   </div>
 
-  <div class="controls">
-    <button id="prev">previous slide</button>
+  <div class="controls-vertical">
     <button id="next">next slide</button>
+    <button id="prev">previous slide</button>
   </div>
-
-  <!-- Новый блок с текстом и слайдером -->
-  <section class="project-detail">
-    <div class="project-text" id="project-text">
-      <h3>Deadside</h3>
-      <p>Звуковой дизайн: создание эффектов окружающей среды, работа с динамикой и пространственным звуком.</p>
-    </div>
-    <div class="project-slider slider" id="project-slider">
-      <div class="slide active">
-        <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="slide">
-        <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="slide">
-        <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-    <div class="controls" style="margin-top:10px;">
-      <button id="proj-prev">previous</button>
-      <button id="proj-next">next</button>
-    </div>
-  </section>
 
 </div>
 
 <script>
-  // Главный слайдер
-  const slides = document.querySelectorAll('.content > .slider .slide');
+  // Слайдер
+  const slides = document.querySelectorAll('.slide');
   let current = 0;
 
   function showSlide(index) {
@@ -236,26 +170,7 @@
     showSlide((current + 1) % slides.length);
   });
 
-  // Новый слайдер с текстом
-  const projSlides = document.querySelectorAll('#project-slider .slide');
-  let projCurrent = 0;
-
-  function showProjSlide(index) {
-    projSlides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-    });
-    projCurrent = index;
-  }
-
-  document.getElementById('proj-prev').addEventListener('click', () => {
-    showProjSlide((projCurrent - 1 + projSlides.length) % projSlides.length);
-  });
-
-  document.getElementById('proj-next').addEventListener('click', () => {
-    showProjSlide((projCurrent + 1) % projSlides.length);
-  });
-
-  // Анимация линий на canvas (оставлена без изменений)
+  // Анимация линий на canvas
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
   let width, height;
@@ -292,6 +207,7 @@
   function draw() {
     ctx.clearRect(0, 0, width, height);
 
+    // Рисуем точки
     points.forEach(p => {
       p.x += p.vx;
       p.y += p.vy;
@@ -304,6 +220,7 @@
       ctx.fill();
     });
 
+    // Соединяем точки
     for (let i = 0; i < pointCount; i++) {
       for (let j = i + 1; j < pointCount; j++) {
         let dx = points[i].x - points[j].x;
@@ -329,11 +246,13 @@
             points[j].vy += forceY;
           }
 
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+          // Настройки линии
+          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`; // белая
           ctx.lineWidth = 1.2;
           ctx.shadowBlur = 8;
           ctx.shadowColor = 'white';
 
+          // Волновая линия (аудио-эффект)
           ctx.beginPath();
           let segments = 20;
           for (let k = 0; k <= segments; k++) {
