@@ -242,116 +242,199 @@
   // Инициализация текста при загрузке
   showSlide(current);
 
-  // Анимация линий на canvas
+<script>
+  // ===== ГЕКСАГОНАЛЬНАЯ СЕТКА С МЯГКИМ ДВИЖЕНИЕМ И УСИЛЕНИЕМ ОТ КУРСОРА =====
   const canvas = document.getElementById('canvas');
   const ctx = canvas.getContext('2d');
-  let width, height;
+
+  let dpr = Math.max(1, window.devicePixelRatio || 1);
+  let width = 0, height = 0;
+
+  // Параметры сетки/анимации
+  const params = {
+    hexRadiusBase: 26,     // базовый радиус ячейки на DPR=1 (ниже — автоподгон под ширину)
+    strokeWidth: 1.1,
+    baseAmp: 2.2,          // базовая амплитуда «дыхания»
+    hoverAmp: 11,          // добавочная амплитуда рядом с курсором
+    mouseRadius: 200,      // радиус влияния курсора (px)
+    speed: 0.0018,         // скорость анимации
+    freq: 0.005,           // частота фаз по пространству
+    fadeDist: 260          // расстояние, где начинаем подмешивать glow/альфу
+  };
+
+  let mouse = { x: Infinity, y: Infinity, inside: false };
+
+  const grid = {
+    cols: 0,
+    rows: 0,
+    centers: [], // {x,y}
+    r: 0,
+    stepX: 0,
+    stepY: 0,
+  };
 
   function resize() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-  }
-  resize();
-  window.addEventListener('resize', resize);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    dpr = Math.max(1, window.devicePixelRatio || 1);
 
-  const points = [];
-  const pointCount = 30;
-  const maxDistance = 150;
+    canvas.width  = Math.floor(w * dpr);
+    canvas.height = Math.floor(h * dpr);
+    canvas.style.width  = w + 'px';
+    canvas.style.height = h + 'px';
 
-  for(let i=0; i<pointCount; i++) {
-    points.push({
-      x: Math.random()*width,
-      y: Math.random()*height,
-      vx: (Math.random()-0.5)*0.5,
-      vy: (Math.random()-0.5)*0.5,
-    });
+    width = canvas.width;
+    height = canvas.height;
+
+    setupGrid();
   }
 
-  let mouse = {x: width/2, y: height/2};
+  function setupGrid() {
+    const wCss = width / dpr;
+    // адаптивный размер ячейки: крупнее на широких экранах, мельче на мобильных
+    const targetCols = Math.round(wCss / 70); // хотим ~70px между центрами по X
+    const r = Math.max(12, Math.min(40, (wCss / Math.max(8, targetCols)) / 1.5));
+    grid.r = r * dpr;
 
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-  });
+    // Плоско-ориентированный шестиугольник:
+    // центр-к-центру по X = 1.5 * r; по Y = sqrt(3) * r
+    grid.stepX = 1.5 * grid.r;
+    grid.stepY = Math.sqrt(3) * grid.r;
 
-  function draw() {
-    ctx.clearRect(0, 0, width, height);
+    const pad = grid.r * 1.2; // небольшой запас, чтобы края были заполнены
+    const cols = Math.ceil((width + pad * 2) / grid.stepX) + 1;
+    const rows = Math.ceil((height + pad * 2) / grid.stepY) + 1;
 
-    points.forEach(p => {
-      p.x += p.vx;
-      p.y += p.vy;
-      if (p.x < 0 || p.x > width) p.vx *= -1;
-      if (p.y < 0 || p.y > height) p.vy *= -1;
+    grid.cols = cols;
+    grid.rows = rows;
+    grid.centers.length = 0;
 
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#fff';
-      ctx.fill();
-    });
-
-    for (let i = 0; i < pointCount; i++) {
-      for (let j = i + 1; j < pointCount; j++) {
-        let dx = points[i].x - points[j].x;
-        let dy = points[i].y - points[j].y;
-        let dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < maxDistance) {
-          let alpha = 1 - dist / maxDistance;
-
-          let midX = (points[i].x + points[j].x) / 2;
-          let midY = (points[i].y + points[j].y) / 2;
-          let mdx = mouse.x - midX;
-          let mdy = mouse.y - midY;
-          let mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-
-          if (mdist < 100) {
-            alpha = 1;
-            let forceX = mdx * 0.0005;
-            let forceY = mdy * 0.0005;
-            points[i].vx += forceX;
-            points[i].vy += forceY;
-            points[j].vx += forceX;
-            points[j].vy += forceY;
-          }
-
-          ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
-          ctx.lineWidth = 1.2;
-          ctx.shadowBlur = 8;
-          ctx.shadowColor = 'white';
-
-          ctx.beginPath();
-          let segments = 20;
-          for (let k = 0; k <= segments; k++) {
-            let t = k / segments;
-            let x = points[i].x + (points[j].x - points[i].x) * t;
-            let y = points[i].y + (points[j].y - points[i].y) * t;
-
-            let offset = Math.sin(t * Math.PI * 4 + Date.now() / 200) * 5;
-            let perpX = -(points[j].y - points[i].y);
-            let perpY = (points[j].x - points[i].x);
-            let len = Math.sqrt(perpX * perpX + perpY * perpY);
-            perpX /= len;
-            perpY /= len;
-
-            x += perpX * offset;
-            y += perpY * offset;
-
-            if (k === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-
-          ctx.stroke();
-        }
+    // Генерация центров с вертикальным смещением каждого нечётного столбца
+    for (let cx = 0; cx < cols; cx++) {
+      const x = cx * grid.stepX - pad;
+      const yOffset = (cx % 2) ? grid.stepY / 2 : 0;
+      for (let cy = 0; cy < rows; cy++) {
+        const y = cy * grid.stepY - pad + yOffset;
+        grid.centers.push({ x, y });
       }
     }
 
-    requestAnimationFrame(draw);
+    // Настройка стилей
+    ctx.lineWidth = params.strokeWidth * dpr;
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
   }
 
-  draw();
+  function hexVertices(cx, cy, r, tShift = 0, amp = 0) {
+    // Плоская ориентация: углы 0, 60, 120, ...
+    const verts = [];
+    for (let i = 0; i < 6; i++) {
+      const ang = i * Math.PI / 3; // 0..5
+      // Лёгкое радиальное дыхание вершин (придаёт «органичность» линиям)
+      const radial = amp * Math.sin(tShift + ang * 2);
+      const rr = r + radial;
+      verts.push({
+        x: cx + rr * Math.cos(ang),
+        y: cy + rr * Math.sin(ang),
+      });
+    }
+    return verts;
+  }
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function smoothstep(edge0, edge1, x) {
+    const t = Math.min(1, Math.max(0, (x - edge0) / (edge1 - edge0)));
+    return t * t * (3 - 2 * t);
+  }
+
+  function drawFrame(ts) {
+    // ts — в ms; приводим к секундам для стабильной скорости
+    const t = ts;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, width, height);
+
+    // Фон — лёгкий «туман» для глубины
+    // (оставляем прозрачным, ибо фон у вас #111)
+    // ctx.fillStyle = 'rgba(255,255,255,0.0)';
+    // ctx.fillRect(0,0,width,height);
+
+    const pxMouse = { x: mouse.x * dpr, y: mouse.y * dpr };
+
+    for (let i = 0; i < grid.centers.length; i++) {
+      const c = grid.centers[i];
+
+      // Фаза и базовая амплитуда «дрейфа» центров
+      const phase = t * params.speed + (c.x + c.y) * params.freq * 0.5;
+      const baseAmp = params.baseAmp * dpr;
+
+      // Увеличиваем амплитуду вблизи курсора
+      let extra = 0;
+      if (mouse.inside) {
+        const dx = (pxMouse.x - c.x);
+        const dy = (pxMouse.y - c.y);
+        const dist = Math.hypot(dx, dy);
+        if (dist < params.mouseRadius * dpr) {
+          const w = 1 - (dist / (params.mouseRadius * dpr));
+          // квадратичное усиление, чтобы «под курсором» было максимально
+          extra = (params.hoverAmp * dpr) * (w * w);
+        }
+      }
+
+      const amp = baseAmp + extra;
+
+      // Вектор смещения центра — плавный круговой дрейф
+      const driftX = Math.cos(phase) * amp;
+      const driftY = Math.sin(phase * 1.1) * amp;
+
+      const cx = c.x + driftX;
+      const cy = c.y + driftY;
+
+      // Лёгкая пульсация вершин (намного меньше, чем сдвиг центра)
+      const vertexAmp = amp * 0.12;
+
+      // Вершины гекса
+      const verts = hexVertices(cx, cy, grid.r, phase, vertexAmp);
+
+      // Альфа/свечение слегка растёт рядом с курсором — подчёркиваем интерактивность
+      let alpha = 0.35;
+      let glow = 0;
+      if (mouse.inside) {
+        const dx = (pxMouse.x - cx);
+        const dy = (pxMouse.y - cy);
+        const dist = Math.hypot(dx, dy);
+        const k = 1 - Math.min(1, dist / (params.fadeDist * dpr));
+        alpha = lerp(alpha, 1.0, k);
+        glow  = 6 * k;
+      }
+
+      ctx.beginPath();
+      ctx.moveTo(verts[0].x, verts[0].y);
+      for (let j = 1; j < 6; j++) ctx.lineTo(verts[j].x, verts[j].y);
+      ctx.closePath();
+
+      ctx.shadowBlur = glow;
+      ctx.shadowColor = 'white';
+      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+      ctx.stroke();
+    }
+
+    requestAnimationFrame(drawFrame);
+  }
+
+  // События
+  window.addEventListener('resize', resize);
+  window.addEventListener('mousemove', (e) => {
+    mouse.x = e.clientX;
+    mouse.y = e.clientY;
+    mouse.inside = true;
+  }, { passive: true });
+  window.addEventListener('mouseleave', () => { mouse.inside = false; });
+
+  // Инициализация
+  resize();
+  requestAnimationFrame(drawFrame);
 </script>
+
 
 </body>
 </html>
