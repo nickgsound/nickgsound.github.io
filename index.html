@@ -1,384 +1,174 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>formersound</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+<meta charset="UTF-8">
+<title>Hex Grid Background</title>
 <style>
-  /* Сбросы и базовые стили */
-  * {
-    margin: 0; padding: 0; box-sizing: border-box;
-  }
-  body, html {
+  html, body {
+    margin: 0;
+    padding: 0;
     height: 100%;
-    background: #111;
-    color: #fff;
-    font-family: 'Montserrat', Arial, sans-serif;
-    overflow-x: hidden;
-  }
-  /* Холст с анимацией на заднем фоне */
-  #canvas {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 0;
-    display: block;
-  }
-  /* Контент поверх анимации */
-  .content {
-    position: relative;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-top: 0;
-  }
-  /* Заголовок сверху */
-  h1 {
-    margin: 50px 0;
-    font-size: 2.5rem;
-    text-align: center;
-    font-family: 'Montserrat', sans-serif;
-  }
-  /* Главное видео */
-  .main-video {
-    width: 100%;
-    max-width: 900px;
-    aspect-ratio: 16 / 9;
-    height: auto;
-  }
-  /* Заголовок для секции */
-  .section-title {
-    margin: 50px 0;
-    font-size: 2rem;
-    text-align: center;
-    font-family: 'Montserrat', Arial, sans-serif;
-    font-weight: 600;
-  }
-
-  /* Новая секция с текстом и слайдером */
-  .projects-section {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-    justify-content: center;
-    margin-bottom: 80px;
-    width: 100%;
-    max-width: 1100px;
-  }
-  .project-text {
-    flex: 0 0 25%;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.4;
-    background: rgba(255 255 255 / 0.05);
-    padding: 20px;
-    border-radius: 8px;
-    min-width: 200px;
-    white-space: pre-wrap;
-  }
-  .project-text strong {
-    display: block;
-    margin-bottom: 8px; /* Отступ между заголовком и текстом */
-    font-weight: 700;
-  }
-  .slider {
-    flex: 0 0 65%;
-    background: rgba(0,0,0,0.5);
-    border-radius: 8px;
+    background: black;
     overflow: hidden;
-    position: relative;
-    aspect-ratio: 16 / 9;
   }
-  .slide {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    display: none;
-  }
-  .slide.active {
+  canvas {
     display: block;
-  }
-  video, iframe {
-    width: 100%;
-    height: 100%;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-  /* Кнопки под текстом слева */
-  .controls {
-    display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    justify-content: flex-start;
-  }
-  .controls button {
-    background: rgba(255,255,255,0.3);
-    border: none;
-    padding: 10px 20px;
-    color: #fff;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background 0.3s;
-    font-family: 'Montserrat', sans-serif;
-  }
-  .controls button:hover {
-    background: rgba(255,255,255,0.7);
-  }
-
-  /* Для кнопок: previous слева от next */
-  .controls button#prev {
-    order: 0;
-  }
-  .controls button#next {
-    order: 1;
-  }
-
-  /* Адаптив */
-  @media (max-width: 900px) {
-    .projects-section {
-      flex-direction: column;
-      align-items: center;
-    }
-    .project-text, .slider {
-      flex: none;
-      width: 90%;
-      min-width: unset;
-    }
-    .controls {
-      justify-content: center;
-      width: 100%;
-    }
   }
 </style>
 </head>
 <body>
 
-<!-- Canvas для анимации линий -->
 <canvas id="canvas"></canvas>
 
-<div class="content">
-
-  <!-- Заголовок сверху -->
-  <h1>NICK GERASIMOV SOUND DESIGN</h1>
-
-  <!-- Главное видео -->
-  <iframe
-    class="main-video"
-    src="https://www.youtube.com/embed/260EdIcqmck?rel=0&modestbranding=1"
-    frameborder="0"
-    allow="encrypted-media"
-    allowfullscreen
-  ></iframe>
-
-  <h2 class="section-title">Featured Sound Design Projects</h2>
-
-  <!-- Секция с текстом слева и видео-слайдером справа -->
-  <div class="projects-section">
-
-    <!-- Текст проекта + кнопки -->
-    <div style="display: flex; flex-direction: column;">
-      <div class="project-text" id="project-text">
-        <strong>Project 1:</strong>
-        - Sound design for game XYZ<br>
-        - Worked on ambient sounds<br>
-        - UI effects and dynamic audio.
-      </div>
-      <div class="controls">
-        <button id="prev">previous slide</button>
-        <button id="next">next slide</button>
-      </div>
-    </div>
-
-    <!-- Видео-слайдер -->
-    <div class="slider">
-      <div class="slide active" data-text="<strong>Deadside:</strong><br>- Lead Sound Designer responsible for weapon, vehicle, and environmental audio<br>- Developed Impulse Response Reverberation system for realistic spatial soundscapes<br>- Managed audio asset curation and workflow optimization in Unreal Engine">
-        <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="slide" data-text="<strong>Neodash:</strong><br>- Lead Sound Designer for high-energy, rhythm-synced audio in Unreal Engine 4<br>- Integrated reactive audio systems enhancing player immersion<br>- Designed dynamic environmental sound responsive to gameplay and music">
-        <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-      <div class="slide" data-text="<strong>World of Warships:</strong><br>- Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)<br>- Collaborated with cross-disciplinary teams using Jira and Git version control<br>- Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms<br>- Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)">
-        <iframe src="https://www.youtube.com/embed/afi2BrsonM8?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-      </div>
-    </div>
-
-  </div>
-
-</div>
-
 <script>
-  // --- Слайдер ---
-  const slides = document.querySelectorAll('.slide');
-  const projectText = document.getElementById('project-text');
-  let current = 0;
+const canvasEl = document.getElementById('canvas');
+const ctx = canvasEl.getContext('2d');
 
-  function showSlide(index) {
-    slides.forEach((slide, i) => {
-      slide.classList.toggle('active', i === index);
-    });
-    current = index;
-    const activeSlide = slides[current];
-    if (activeSlide) {
-      projectText.innerHTML = activeSlide.dataset.text || '';
+let dpr = Math.max(1, window.devicePixelRatio || 1);
+let width = 0, height = 0;
+
+const params = {
+  baseAmp: 2.2,
+  hoverAmp: 11,
+  mouseRadius: 200,
+  speed: 0.0018,
+  freq: 0.005,
+  fadeDist: 260,
+  strokeWidth: 1.1
+};
+
+let mouse = { x: Infinity, y: Infinity, inside: false };
+const grid = { centers: [], r: 0, stepX: 0, stepY: 0 };
+
+function resize() {
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  dpr = Math.max(1, window.devicePixelRatio || 1);
+
+  canvasEl.width  = Math.floor(w * dpr);
+  canvasEl.height = Math.floor(h * dpr);
+  canvasEl.style.width  = w + 'px';
+  canvasEl.style.height = h + 'px';
+
+  width = canvasEl.width;
+  height = canvasEl.height;
+  setupGrid();
+}
+
+function setupGrid() {
+  const wCss = width / dpr;
+  const targetCols = Math.round(wCss / 70);
+  const r = Math.max(12, Math.min(40, (wCss / Math.max(8, targetCols)) / 1.5));
+  grid.r = r * dpr;
+  grid.stepX = 1.5 * grid.r;
+  grid.stepY = Math.sqrt(3) * grid.r;
+
+  const pad = grid.r * 1.2;
+  const cols = Math.ceil((width + pad * 2) / grid.stepX) + 1;
+  const rows = Math.ceil((height + pad * 2) / grid.stepY) + 1;
+
+  grid.centers.length = 0;
+  for (let cx = 0; cx < cols; cx++) {
+    const x = cx * grid.stepX - pad;
+    const yOffset = (cx % 2) ? grid.stepY / 2 : 0;
+    for (let cy = 0; cy < rows; cy++) {
+      const y = cy * grid.stepY - pad + yOffset;
+      grid.centers.push({
+        x, y,
+        rotation: Math.random() * Math.PI * 2,
+        noise: (Math.random() - 0.5) * 2,
+        rotPhase: Math.random() * Math.PI * 2
+      });
     }
   }
 
-  document.getElementById('prev').addEventListener('click', () => {
-    showSlide((current - 1 + slides.length) % slides.length);
-  });
+  ctx.lineWidth = params.strokeWidth * dpr;
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+}
 
-  document.getElementById('next').addEventListener('click', () => {
-    showSlide((current + 1) % slides.length);
-  });
-
-  showSlide(current);
-
-  // --- Гексагональная сетка ---
-  const canvasEl = document.getElementById('canvas');
-  const ctx = canvasEl.getContext('2d');
-
-  let dpr = Math.max(1, window.devicePixelRatio || 1);
-  let width = 0, height = 0;
-
-  const params = {
-    baseAmp: 2.2,
-    hoverAmp: 11,
-    mouseRadius: 200,
-    speed: 0.0018,
-    freq: 0.005,
-    fadeDist: 260,
-    strokeWidth: 1.1
-  };
-
-  let mouse = { x: Infinity, y: Infinity, inside: false };
-  const grid = { cols: 0, rows: 0, centers: [], r: 0, stepX: 0, stepY: 0 };
-
-  function resize() {
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    dpr = Math.max(1, window.devicePixelRatio || 1);
-
-    canvasEl.width  = Math.floor(w * dpr);
-    canvasEl.height = Math.floor(h * dpr);
-    canvasEl.style.width  = w + 'px';
-    canvasEl.style.height = h + 'px';
-
-    width = canvasEl.width;
-    height = canvasEl.height;
-    setupGrid();
+function hexVertices(cx, cy, r, tShift = 0, amp = 0, rotation = 0) {
+  const verts = [];
+  for (let i = 0; i < 6; i++) {
+    const ang = i * Math.PI / 3 + rotation;
+    const radial = amp * Math.sin(tShift + ang * 2);
+    const rr = r + radial;
+    verts.push({ x: cx + rr * Math.cos(ang), y: cy + rr * Math.sin(ang) });
   }
+  return verts;
+}
 
-  function setupGrid() {
-    const wCss = width / dpr;
-    const targetCols = Math.round(wCss / 70);
-    const r = Math.max(12, Math.min(40, (wCss / Math.max(8, targetCols)) / 1.5));
-    grid.r = r * dpr;
-    grid.stepX = 1.5 * grid.r;
-    grid.stepY = Math.sqrt(3) * grid.r;
+function lerp(a, b, t) { return a + (b - a) * t; }
 
-    const pad = grid.r * 1.2;
-    const cols = Math.ceil((width + pad * 2) / grid.stepX) + 1;
-    const rows = Math.ceil((height + pad * 2) / grid.stepY) + 1;
+function drawFrame(ts) {
+  const t = ts;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, width, height);
 
-    grid.centers.length = 0;
-    for (let cx = 0; cx < cols; cx++) {
-      const x = cx * grid.stepX - pad;
-      const yOffset = (cx % 2) ? grid.stepY / 2 : 0;
-      for (let cy = 0; cy < rows; cy++) {
-        const y = cy * grid.stepY - pad + yOffset;
-        grid.centers.push({ x, y });
+  const pxMouse = { x: mouse.x * dpr, y: mouse.y * dpr };
+
+  for (let c of grid.centers) {
+    const phase = t * params.speed + (c.x + c.y) * params.freq * 0.5 + c.rotPhase;
+    const baseAmp = params.baseAmp * dpr;
+
+    let extra = 0;
+    if (mouse.inside) {
+      const dx = pxMouse.x - c.x;
+      const dy = pxMouse.y - c.y;
+      const dist = Math.hypot(dx, dy);
+      if (dist < params.mouseRadius * dpr) {
+        const w = 1 - dist / (params.mouseRadius * dpr);
+        extra = (params.hoverAmp * dpr) * (w * w);
       }
     }
 
-    ctx.lineWidth = params.strokeWidth * dpr;
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-  }
+    const amp = baseAmp + extra;
 
-  function hexVertices(cx, cy, r, tShift = 0, amp = 0) {
-    const verts = [];
-    for (let i = 0; i < 6; i++) {
-      const ang = i * Math.PI / 3;
-      const radial = amp * Math.sin(tShift + ang * 2);
-      const rr = r + radial;
-      verts.push({ x: cx + rr * Math.cos(ang), y: cy + rr * Math.sin(ang) });
-    }
-    return verts;
-  }
+    const cx = c.x + Math.cos(phase + c.noise) * amp;
+    const cy = c.y + Math.sin(phase * 1.1 + c.noise) * amp;
+    const verts = hexVertices(cx, cy, grid.r, phase + c.noise, amp * 0.12, c.rotation);
 
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function drawFrame(ts) {
-    const t = ts;
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.clearRect(0, 0, width, height);
-
-    const pxMouse = { x: mouse.x * dpr, y: mouse.y * dpr };
-
-    for (let c of grid.centers) {
-      const phase = t * params.speed + (c.x + c.y) * params.freq * 0.5;
-      const baseAmp = params.baseAmp * dpr;
-
-      let extra = 0;
-      if (mouse.inside) {
-        const dx = pxMouse.x - c.x;
-        const dy = pxMouse.y - c.y;
-        const dist = Math.hypot(dx, dy);
-        if (dist < params.mouseRadius * dpr) {
-          const w = 1 - dist / (params.mouseRadius * dpr);
-          extra = (params.hoverAmp * dpr) * (w * w);
-        }
-      }
-
-      const amp = baseAmp + extra;
-      const cx = c.x + Math.cos(phase) * amp;
-      const cy = c.y + Math.sin(phase * 1.1) * amp;
-      const verts = hexVertices(cx, cy, grid.r, phase, amp * 0.12);
-
-      let alpha = 0.35, glow = 0;
-      if (mouse.inside) {
-        const dx = pxMouse.x - cx;
-        const dy = pxMouse.y - cy;
-        const dist = Math.hypot(dx, dy);
-        const k = 1 - Math.min(1, dist / (params.fadeDist * dpr));
-        alpha = lerp(alpha, 1.0, k);
-        glow = 6 * k;
-      }
-
-      ctx.beginPath();
-      ctx.moveTo(verts[0].x, verts[0].y);
-      for (let j = 1; j < 6; j++) ctx.lineTo(verts[j].x, verts[j].y);
-      ctx.closePath();
-
-      ctx.shadowBlur = glow;
-      ctx.shadowColor = 'white';
-      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-      ctx.stroke();
+    let alpha = 0.18;
+    let glow = 0;
+    if (mouse.inside) {
+      const dx = pxMouse.x - cx;
+      const dy = pxMouse.y - cy;
+      const dist = Math.hypot(dx, dy);
+      const k = 1 - Math.min(1, dist / (params.fadeDist * dpr));
+      alpha = lerp(alpha, 0.5, k);
+      glow = 4 * k;
     }
 
-    requestAnimationFrame(drawFrame);
+    ctx.beginPath();
+    ctx.moveTo(verts[0].x, verts[0].y);
+    for (let j = 1; j < 6; j++) ctx.lineTo(verts[j].x, verts[j].y);
+    ctx.closePath();
+
+    const grad = ctx.createLinearGradient(verts[0].x, verts[0].y, verts[3].x, verts[3].y);
+    grad.addColorStop(0, `rgba(255,255,255,${alpha * 0.3})`);
+    grad.addColorStop(0.5, `rgba(255,255,255,${alpha})`);
+    grad.addColorStop(1, `rgba(255,255,255,${alpha * 0.3})`);
+
+    ctx.shadowBlur = glow;
+    ctx.shadowColor = 'white';
+    ctx.strokeStyle = grad;
+    ctx.stroke();
   }
 
-  window.addEventListener('resize', resize);
-  window.addEventListener('mousemove', e => {
-    mouse.x = e.clientX;
-    mouse.y = e.clientY;
-    mouse.inside = true;
-  });
-  window.addEventListener('mouseleave', () => mouse.inside = false);
-
-  resize();
   requestAnimationFrame(drawFrame);
+}
+
+window.addEventListener('resize', resize);
+window.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+  mouse.inside = true;
+});
+window.addEventListener('mouseleave', () => mouse.inside = false);
+
+resize();
+requestAnimationFrame(drawFrame);
 </script>
-
-
 
 </body>
 </html>
