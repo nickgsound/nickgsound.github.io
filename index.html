@@ -162,13 +162,17 @@
     ctx.stroke();
   }
 
-  function animate() {
-    ctx.clearRect(0,0,width,height);
-    hexes.forEach(h => {
-      drawHex(h.x, h.y, hexRadius, h.offset + Date.now()/2000);
-    });
-    requestAnimationFrame(animate);
-  }
+function animate() {
+  ctx.clearRect(0,0,width,height);
+  const time = Date.now() / 2000; // глобальное время для анимации
+  hexes.forEach(h => {
+    // Добавим небольшое колебание x и y
+    const dx = Math.sin(time + h.offset) * 5; // смещение по x
+    const dy = Math.cos(time + h.offset) * 5; // смещение по y
+    drawHex(h.x + dx, h.y + dy, hexRadius, h.offset + time);
+  });
+  requestAnimationFrame(animate);
+}
 
   animate();
 </script>
