@@ -119,62 +119,94 @@
 
   // ------------------------------
   // Фоновая анимация: плавные гексы
-  const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
-  let width = window.innerWidth;
-  let height = window.innerHeight;
-  canvas.width = width; canvas.height = height;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+let width = window.innerWidth;
+let height = window.innerHeight;
+canvas.width = width; canvas.height = height;
 
-  window.addEventListener('resize', () => {
-    width = window.innerWidth; height = window.innerHeight;
-    canvas.width = width; canvas.height = height;
-  });
+window.addEventListener('resize', () => {
+  width = window.innerWidth; 
+  height = window.innerHeight;
+  canvas.width = width; 
+  canvas.height = height;
+});
 
-  const hexes = [];
-  const hexRadius = 40;
-  const hexSpacing = hexRadius * 1.5;
-  const rows = Math.ceil(height / hexSpacing) + 1;
-  const cols = Math.ceil(width / hexSpacing) + 1;
+const hexes = [];
+const hexRadius = 40;
+const hexSpacing = hexRadius * 1.5;
+const rows = Math.ceil(height / hexSpacing) + 1;
+const cols = Math.ceil(width / hexSpacing) + 1;
 
-  for (let y = 0; y < rows; y++) {
-    for (let x = 0; x < cols; x++) {
-      hexes.push({
-        x: x * hexSpacing + (y % 2 ? hexSpacing/2 : 0),
-        y: y * Math.sqrt(3)/2 * hexRadius,
-        offset: Math.random() * Math.PI*2
-      });
-    }
+const mouse = { x: -1000, y: -1000 };
+window.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+// Инициализация хексов
+for (let y = 0; y < rows; y++) {
+  for (let x = 0; x < cols; x++) {
+    hexes.push({
+      x: x * hexSpacing + (y % 2 ? hexSpacing/2 : 0),
+      y: y * Math.sqrt(3)/2 * hexRadius,
+      offset: Math.random() * Math.PI*2,
+      scaleOffset: Math.random() * Math.PI*2
+    });
   }
+}
 
-  function drawHex(x, y, r, phase) {
-    ctx.beginPath();
-    for (let i=0; i<6; i++) {
-      let angle = Math.PI/3 * i;
-      let px = x + r * Math.cos(angle);
-      let py = y + r * Math.sin(angle);
-      if (i===0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    }
-    ctx.closePath();
-    let alpha = 0.05 + 0.05 * Math.sin(phase);
-    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
+// Функция рисования хекса
+function drawHex(x, y, r, phase, highlight=0, scale=1) {
+  ctx.beginPath();
+  for (let i=0; i<6; i++) {
+    let angle = Math.PI/3 * i;
+    let px = x + r * Math.cos(angle) * scale;
+    let py = y + r * Math.sin(angle) * scale;
+    if (i===0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
   }
+  ctx.closePath();
+  let alpha = 0.05 + 0.05 * Math.sin(phase) + highlight;
+  ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+}
 
+// Главная функция анимации
 function animate() {
   ctx.clearRect(0,0,width,height);
-  const time = Date.now() / 2000; // глобальное время для анимации
+  const time = Date.now() / 2000;
+
   hexes.forEach(h => {
-    // Добавим небольшое колебание x и y
-    const dx = Math.sin(time + h.offset) * 5; // смещение по x
-    const dy = Math.cos(time + h.offset) * 5; // смещение по y
-    drawHex(h.x + dx, h.y + dy, hexRadius, h.offset + time);
+    // плавное колебание
+    const dx = Math.sin(time + h.offset) * 5;
+    const dy = Math.cos(time + h.offset) * 5;
+
+    // отталкивание от мыши
+    const distX = h.x + dx - mouse.x;
+    const distY = h.y + dy - mouse.y;
+    const dist = Math.sqrt(distX*distX + distY*distY);
+    let repelX = 0, repelY = 0, highlight = 0, scale = 1;
+    const radius = 120; // радиус действия мыши
+    if(dist < radius) {
+      const force = (radius - dist)/radius;
+      repelX = (distX / dist) * force * 20; 
+      repelY = (distY / dist) * force * 20;
+      highlight = force * 0.4; 
+      scale = 1 + force * 0.3; // немного растём при близости мыши
+    }
+
+    // небольшой пульс и 3D эффект
+    const pulse = 0.05 * Math.sin(time*3 + h.scaleOffset);
+
+    drawHex(h.x + dx + repelX, h.y + dy + repelY, hexRadius, h.offset + time, highlight, scale + pulse);
   });
+
   requestAnimationFrame(animate);
 }
 
-  animate();
+animate();
 </script>
 
 </body>
