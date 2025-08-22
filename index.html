@@ -136,7 +136,7 @@ window.addEventListener('resize', () => {
 const hexes = [];
 const hexRadius = 40;
 const hexSpacing = hexRadius * 1.5;
-const rows = Math.ceil(height / hexSpacing) + 1;
+const rows = Math.ceil(height / (hexRadius * Math.sqrt(3)/2)) + 3;
 const cols = Math.ceil(width / hexSpacing) + 1;
 
 const mouse = { x: -1000, y: -1000 };
@@ -202,7 +202,7 @@ function animate() {
     const pulse = 0.05 * Math.sin(time*3 + h.scaleOffset);
 
     // прозрачность по вертикали (чем ниже, тем прозрачнее)
-    const alphaScale = 1 - (h.y / height);
+    const alphaScale = Math.max(0, 1 - ((h.y + dx + dy + repelY) / height));
 
     drawHex(h.x + dx + repelX, h.y + dy + repelY, hexRadius, h.offset + time, highlight, scale + pulse, alphaScale);
   });
