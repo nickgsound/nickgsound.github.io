@@ -8,72 +8,21 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html { height: 100%; background: #111; color: #fff; font-family: 'Montserrat', Arial, sans-serif; overflow-x: hidden; }
-
-    #canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      z-index: 0;
-      display: block;
-    }
-
-    .content {
-      position: relative; z-index: 10;
-      display: flex; flex-direction: column; align-items: center; padding-top: 0;
-    }
-
+    #canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; display: block; }
+    .content { position: relative; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 0; }
     h1 { margin: 50px 0; font-size: 2.5rem; text-align: center; font-family: 'Montserrat', sans-serif; }
-
-    .main-video {
-      width: 100%; max-width: 900px; aspect-ratio: 16 / 9; height: auto;
-    }
-
-    .section-title {
-      margin: 50px 0; font-size: 2rem; text-align: center;
-      font-family: 'Montserrat', Arial, sans-serif; font-weight: 600;
-    }
-
-    .projects-section {
-      display: flex; gap: 30px; align-items: flex-start; justify-content: center;
-      margin-bottom: 80px; width: 100%; max-width: 1100px;
-    }
-
-    .project-text {
-      flex: 0 0 25%; font-family: 'Montserrat', sans-serif; font-weight: 600;
-      font-size: 1rem; line-height: 1.4;
-      background: rgba(255 255 255 / 0.05);
-      padding: 20px; border-radius: 8px;
-      min-width: 200px; white-space: pre-wrap;
-    }
-
+    .main-video { width: 100%; max-width: 900px; aspect-ratio: 16 / 9; height: auto; }
+    .section-title { margin: 50px 0; font-size: 2rem; text-align: center; font-family: 'Montserrat', Arial, sans-serif; font-weight: 600; }
+    .projects-section { display: flex; gap: 30px; align-items: flex-start; justify-content: center; margin-bottom: 80px; width: 100%; max-width: 1100px; }
+    .project-text { flex: 0 0 25%; font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 1rem; line-height: 1.4; background: rgba(255 255 255 / 0.05); padding: 20px; border-radius: 8px; min-width: 200px; white-space: pre-wrap; }
     .project-text strong { display: block; margin-bottom: 8px; font-weight: 700; }
-
-    .slider {
-      flex: 0 0 65%;
-      background: rgba(0,0,0,0.5);
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-      aspect-ratio: 16 / 9;
-    }
-
+    .slider { flex: 0 0 65%; background: rgba(0,0,0,0.5); border-radius: 8px; overflow: hidden; position: relative; aspect-ratio: 16 / 9; }
     .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; }
     .slide.active { display: block; }
-
     video, iframe { width: 100%; height: 100%; border-radius: 8px; object-fit: cover; }
-
-    .controls {
-      display: flex; gap: 12px; margin-top: 20px; justify-content: flex-start;
-    }
-
-    .controls button {
-      background: rgba(255,255,255,0.5); border: none; padding: 10px 20px;
-      color: #fff; font-size: 16px; cursor: pointer; border-radius: 5px;
-      transition: background 0.3s; font-family: 'Montserrat', sans-serif;
-    }
-
+    .controls { display: flex; gap: 12px; margin-top: 20px; justify-content: flex-start; }
+    .controls button { background: rgba(255,255,255,0.5); border: none; padding: 10px 20px; color: #fff; font-size: 16px; cursor: pointer; border-radius: 5px; transition: background 0.3s; font-family: 'Montserrat', sans-serif; }
     .controls button:hover { background: rgba(255,255,255,0.2); }
-
     @media (max-width: 900px) {
       .projects-section { flex-direction: column; align-items: center; }
       .project-text, .slider { flex: none; width: 90%; min-width: unset; }
@@ -81,27 +30,13 @@
     }
   </style>
 </head>
-
 <body>
-
   <canvas id="canvas"></canvas>
-
   <div class="content">
-
     <h1>NICK GERASIMOV SOUND DESIGN</h1>
-
-    <iframe
-      class="main-video"
-      src="https://www.youtube.com/embed/2P_0RLgli1M?rel=0&modestbranding=1"
-      frameborder="0"
-      allow="encrypted-media"
-      allowfullscreen
-    ></iframe>
-
+    <iframe class="main-video" src="https://www.youtube.com/embed/2P_0RLgli1M?rel=0&modestbranding=1" frameborder="0" allow="encrypted-media" allowfullscreen></iframe>
     <h2 class="section-title">Featured Sound Design Projects</h2>
-
     <div class="projects-section">
-
       <div style="display: flex; flex-direction: column;">
         <div class="project-text" id="project-text">
           <strong>Project 1:</strong>
@@ -109,7 +44,6 @@
           - Worked on ambient sounds<br>
           - UI effects and dynamic audio.
         </div>
-
         <div class="controls">
           <button id="prev">previous slide</button>
           <button id="next">next slide</button>
@@ -117,19 +51,25 @@
       </div>
 
       <div class="slider">
+        <!-- 1. Weltkrieg 1 Firestorm -->
+        <div class="slide active" data-text="<strong>Weltkrieg 1 Firestorm:</strong><br>- WW1 FPS game, with massive online battles<br>- Lead Sound Designer responsible for weapon, vehicle, and environmental audio<br>- Full FMOD integration, optimization and audio mastering">
+          <iframe src="https://www.youtube.com/embed/Is3zOTsxAIk?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+        </div>
 
-        <div class="slide active" data-text="<strong>Deadside:</strong><br>- Lead Sound Designer responsible for weapon, vehicle, and environmental audio<br>- Developed Impulse Response Reverberation system for realistic spatial soundscapes<br>- Managed audio asset curation and workflow optimization in Unreal Engine">
+        <!-- 2. Deadside -->
+        <div class="slide" data-text="<strong>Deadside:</strong><br>- Lead Sound Designer responsible for weapon, vehicle, and environmental audio<br>- Developed Impulse Response Reverberation system for realistic spatial soundscapes<br>- Managed audio asset curation and workflow optimization in Unreal Engine">
           <iframe src="https://www.youtube.com/embed/tfO7imWr6S0?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
         </div>
 
-        <div class="slide" data-text="<strong>Neodash:</strong><br>- Lead Sound Designer for high-energy, rhythm-synced audio in Unreal Engine 4<br>- Integrated reactive audio systems enhancing player immersion<br>- Designed dynamic environmental sound responsive to gameplay and music">
-          <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
-        </div>
-
+        <!-- 3. World of Warships -->
         <div class="slide" data-text="<strong>World of Warships:</strong><br>- Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)<br>- Collaborated with cross-disciplinary teams using Jira and Git version control<br>- Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms<br>- Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)">
           <iframe src="https://www.youtube.com/embed/IpafDlU8qAA?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
         </div>
 
+        <!-- 4. Neodash -->
+        <div class="slide" data-text="<strong>Neodash:</strong><br>- Lead Sound Designer for high-energy, rhythm-synced audio in Unreal Engine 4<br>- Integrated reactive audio systems enhancing player immersion<br>- Designed dynamic environmental sound responsive to gameplay and music">
+          <iframe src="https://www.youtube.com/embed/J--JNgXJqxU?rel=0&modestbranding=1&iv_load_policy=3" frameborder="0" allowfullscreen></iframe>
+        </div>
       </div>
     </div>
   </div>
@@ -139,14 +79,12 @@
     const slides = document.querySelectorAll('.slide');
     const projectText = document.getElementById('project-text');
     let current = 0;
-
     function showSlide(index) {
       slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
       current = index;
       const activeSlide = slides[current];
       if (activeSlide) projectText.innerHTML = activeSlide.dataset.text || '';
     }
-
     document.getElementById('prev').addEventListener('click', () => showSlide((current - 1 + slides.length) % slides.length));
     document.getElementById('next').addEventListener('click', () => showSlide((current + 1) % slides.length));
     showSlide(current);
@@ -159,27 +97,22 @@
     let height = window.innerHeight;
     canvas.width = width;
     canvas.height = height;
-
     window.addEventListener('resize', () => {
       width = window.innerWidth;
       height = window.innerHeight;
       canvas.width = width;
       canvas.height = height;
     });
-
     const hexes = [];
     const hexRadius = 40;
     const hexSpacing = hexRadius * 1.5;
     const rows = Math.ceil(height / (hexRadius * Math.sqrt(3)/2)) + 3;
     const cols = Math.ceil(width / hexSpacing) + 1;
-
     const mouse = { x: -1000, y: -1000 };
     window.addEventListener('mousemove', e => {
       mouse.x = e.clientX;
       mouse.y = e.clientY;
     });
-
-    // Инициализация хексов
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         hexes.push({
@@ -190,16 +123,13 @@
         });
       }
     }
-
-    // Функция рисования хекса
     function drawHex(x, y, r, phase, highlight=0, scale=1, alphaScale=1) {
       ctx.beginPath();
-      for (let i = 0; i < 6; i++) {
+      for (let i=0; i<6; i++) {
         let angle = Math.PI/3 * i;
         let px = x + r * Math.cos(angle) * scale;
         let py = y + r * Math.sin(angle) * scale;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
+        if (i===0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
       }
       ctx.closePath();
       let alpha = (0.05 + 0.05 * Math.sin(phase) + highlight) * alphaScale;
@@ -207,41 +137,31 @@
       ctx.lineWidth = 1;
       ctx.stroke();
     }
-
-    // Главная функция анимации
     function animate() {
       ctx.clearRect(0,0,width,height);
       const time = Date.now() / 2000;
-
       hexes.forEach(h => {
         const dx = Math.sin(time + h.offset) * 5;
         const dy = Math.cos(time + h.offset) * 5;
-
         const distX = h.x + dx - mouse.x;
         const distY = h.y + dy - mouse.y;
         const dist = Math.sqrt(distX*distX + distY*distY);
-
         let repelX = 0, repelY = 0, highlight = 0, scale = 1;
         const radius = 120;
-        if (dist < radius) {
+        if(dist < radius) {
           const force = (radius - dist)/radius;
           repelX = (distX / dist) * force * 20;
           repelY = (distY / dist) * force * 20;
           highlight = force * 0.4;
           scale = 1 + force * 0.3;
         }
-
         const pulse = 0.05 * Math.sin(time*3 + h.scaleOffset);
         const alphaScale = Math.max(0, 1 - ((h.y + dx + dy + repelY) / height));
-
         drawHex(h.x + dx + repelX, h.y + dy + repelY, hexRadius, h.offset + time, highlight, scale + pulse, alphaScale);
       });
-
       requestAnimationFrame(animate);
     }
-
     animate();
   </script>
-
 </body>
 </html>
