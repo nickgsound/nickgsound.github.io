@@ -135,53 +135,29 @@
       ctx.stroke();
     }
     function animate() {
-  ctx.clearRect(0, 0, width, height);
-  const time = Date.now() / 1000;
-
-  hexes.forEach(h => {
-
-    // базовая пульсация как была
-    const dx = Math.sin(time + h.offset) * 5;
-    const dy = Math.cos(time + h.offset) * 5;
-
-    // глобальная волна
-    const wave = Math.sin(h.x * 0.01 + h.y * 0.01 + time * 2);
-    const waveScale = 1 + wave * 0.25;
-    const waveAlpha = (wave + 1) / 2 * 0.15;
-
-    // взаимодействие с мышью
-    const distX = h.x + dx - mouse.x;
-    const distY = h.y + dy - mouse.y;
-    const dist = Math.sqrt(distX * distX + distY * distY);
-
-    let repelX = 0, repelY = 0, highlight = 0;
-    const radius = 120;
-
-    if (dist < radius) {
-      const force = (radius - dist) / radius;
-      repelX = (distX / dist) * force * 20;
-      repelY = (distY / dist) * force * 20;
-      highlight = force * 0.4;
+      ctx.clearRect(0,0,width,height);
+      const time = Date.now() / 2000;
+      hexes.forEach(h => {
+        const dx = Math.sin(time + h.offset) * 5;
+        const dy = Math.cos(time + h.offset) * 5;
+        const distX = h.x + dx - mouse.x;
+        const distY = h.y + dy - mouse.y;
+        const dist = Math.sqrt(distX*distX + distY*distY);
+        let repelX = 0, repelY = 0, highlight = 0, scale = 1;
+        const radius = 120;
+        if(dist < radius) {
+          const force = (radius - dist)/radius;
+          repelX = (distX / dist) * force * 20;
+          repelY = (distY / dist) * force * 20;
+          highlight = force * 0.4;
+          scale = 1 + force * 0.3;
+        }
+        const pulse = 0.05 * Math.sin(time*3 + h.scaleOffset);
+        const alphaScale = Math.max(0, 1 - ((h.y + dx + dy + repelY) / height));
+        drawHex(h.x + dx + repelX, h.y + dy + repelY, hexRadius, h.offset + time, highlight, scale + pulse, alphaScale);
+      });
+      requestAnimationFrame(animate);
     }
-
-    // применяем
-    const scale = waveScale;
-    const alphaScale = waveAlpha;
-
-    drawHex(
-      h.x + dx + repelX,
-      h.y + dy + repelY,
-      hexRadius,
-      h.offset + time,
-      highlight,
-      scale,
-      alphaScale
-    );
-
-  });
-
-  requestAnimationFrame(animate);
-}
     animate();
   </script>
 </body>
