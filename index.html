@@ -2,693 +2,715 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>nick g | game audio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nick g | game audio</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body, html {
-      min-height: 100%;
-      background: #111;
-      color: #fff;
-      font-family: 'Montserrat', Arial, sans-serif;
-      overflow-x: hidden;
-    }
+html, body {
+  min-height: 100%;
+  background: #111;
+  color: #fff;
+  font-family: 'Montserrat', Arial, sans-serif;
+  overflow-x: hidden;
+}
 
-    #canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      display: block;
-    }
+#canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+}
 
-    .content {
-      position: relative;
-      z-index: 10;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0 20px;
-    }
+.content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 20px;
+}
 
-    h1 {
-      margin: 50px 0 25px;
-      font-size: 2.5rem;
-      text-align: center;
-      font-family: 'Montserrat', sans-serif;
-    }
+h1 {
+  margin: 50px 0 25px;
+  font-size: 2.5rem;
+  text-align: center;
+}
 
-    .section-title {
-      margin: 50px 0 55px;
-      font-size: 2rem;
-      text-align: center;
-      font-family: 'Montserrat', Arial, sans-serif;
-      font-weight: 600;
-    }
+.section-title {
+  margin: 50px 0 55px;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: 600;
+}
 
-    /* PROJECT SECTIONS */
+/* ALL PROJECT BLOCKS */
 
-    .project-block {
-      width: 100%;
-      max-width: 1100px;
-      margin-bottom: 90px;
-    }
+.project-block,
+.demo-section {
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 85px;
+}
 
-    .project-heading {
-      font-size: 1.7rem;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 30px;
-    }
+.project-heading {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 30px;
+}
 
-    .projects-section {
-      display: flex;
-      gap: 30px;
-      align-items: flex-start;
-      justify-content: center;
-      width: 100%;
-    }
+/* DESCRIPTION + VIDEO */
 
-    .project-info {
-      flex: 0 0 30%;
-      display: flex;
-      flex-direction: column;
-    }
+.projects-section {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+  justify-content: center;
+  width: 100%;
+}
 
-    .project-text {
-      font-family: 'Montserrat', sans-serif;
-      font-weight: 600;
-      font-size: 1rem;
-      line-height: 1.5;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 8px;
-      min-width: 200px;
-      white-space: normal;
-    }
+.project-info {
+  flex: 0 0 30%;
+  min-width: 0;
+}
 
-    .project-text strong {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 700;
-    }
+.project-text {
+  background: rgba(255,255,255,0.05);
+  padding: 22px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.6;
+}
 
-    /* VIDEO SLIDER */
+.project-text strong {
+  display: block;
+  font-weight: 700;
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
 
-    .slider-container {
-      flex: 0 0 65%;
-      min-width: 0;
-    }
+.project-text ul {
+  padding-left: 20px;
+  margin: 0;
+}
 
-    .slider {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 8px;
-      overflow: hidden;
-      position: relative;
-      aspect-ratio: 16 / 9;
-    }
+.project-text li {
+  margin-bottom: 12px;
+}
 
-    .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
+.project-text li:last-child {
+  margin-bottom: 0;
+}
 
-    .slide.active {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
+/* VIDEO SLIDER */
 
-    .slide iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      border-radius: 8px;
-    }
+.slider-container {
+  flex: 0 0 65%;
+  min-width: 0;
+}
 
-    /* SLIDER BUTTONS */
+.slider {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: rgba(0,0,0,0.5);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
 
-    .controls {
-      display: flex;
-      gap: 12px;
-      margin-top: 20px;
-      justify-content: center;
-    }
+.slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
 
-    .controls button {
-      background: rgba(255, 255, 255, 0.1);
-      border: none;
-      padding: 14px 28px;
-      color: #fff;
-      font-size: 16px;
-      cursor: pointer;
-      border-radius: 5px;
-      transition: background 0.3s;
-      font-family: 'Montserrat', sans-serif;
-    }
+.slide.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
 
-    .controls button:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
+.slide iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 8px;
+}
 
-    /* DEMO REELS */
+/* VIDEO CONTROLS */
 
-    .demo-section {
-      width: 100%;
-      max-width: 900px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-bottom: 40px;
-    }
+.controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  justify-content: center;
+}
 
-    .demo-section .section-title {
-      margin: 0 0 45px;
-    }
+.controls button {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  padding: 14px 28px;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+  font-family: 'Montserrat', sans-serif;
+}
 
-    .main-video {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      height: auto;
-      margin: 0 auto 60px;
-      display: block;
-      border: none;
-    }
+.controls button:hover {
+  background: rgba(255,255,255,0.22);
+}
 
-    /* MOBILE */
+/* DEMO REELS */
 
-    @media (max-width: 900px) {
-      .content {
-        padding: 0 15px;
-      }
+.demo-section {
+  margin-bottom: 70px;
+}
 
-      .projects-section {
-        flex-direction: column;
-        align-items: center;
-      }
+.demo-section .project-heading {
+  margin-bottom: 30px;
+}
 
-      .project-info,
-      .slider-container {
-        flex: none;
-        width: 100%;
-      }
+/* MOBILE */
 
-      .project-text {
-        width: 100%;
-        min-width: unset;
-      }
+@media (max-width: 900px) {
 
-      .controls {
-        justify-content: center;
-        width: 100%;
-      }
+  .content {
+    padding: 0 15px;
+  }
 
-      .project-block {
-        margin-bottom: 75px;
-      }
+  h1 {
+    font-size: 2rem;
+  }
 
-      .section-title {
-        font-size: 1.6rem;
-      }
+  .section-title {
+    font-size: 1.6rem;
+  }
 
-      .project-heading {
-        font-size: 1.4rem;
-      }
+  .project-heading {
+    font-size: 1.6rem;
+  }
 
-      h1 {
-        font-size: 2rem;
-      }
+  .projects-section {
+    flex-direction: column;
+    align-items: center;
+  }
 
-      .controls button {
-        padding: 12px 20px;
-        font-size: 14px;
-      }
-    }
+  .project-info,
+  .slider-container {
+    flex: none;
+    width: 100%;
+  }
 
-  </style>
+  .project-text {
+    width: 100%;
+    font-size: 0.9rem;
+  }
+
+  .project-block,
+  .demo-section {
+    margin-bottom: 70px;
+  }
+
+  .controls button {
+    padding: 12px 20px;
+    font-size: 13px;
+  }
+
+}
+
+</style>
 </head>
 
 <body>
 
-  <canvas id="canvas"></canvas>
+<canvas id="canvas"></canvas>
 
-  <div class="content">
+<div class="content">
 
-    <h1>Nick G | Sound Designer</h1>
+<h1>Nick G | Sound Designer</h1>
 
-    <!-- FEATURED SOUND DESIGN PROJECTS -->
-
-    <h2 class="section-title">Featured Sound Design Projects</h2>
+<h2 class="section-title">Featured Sound Design Projects</h2>
 
 
-    <!-- DEADSide -->
+<!-- ================= DEADSide ================= -->
 
-    <div class="project-block">
+<section class="project-block">
 
-      <h3 class="project-heading">Deadside</h3>
+  <h2 class="project-heading">Deadside</h2>
 
-      <div class="projects-section">
+  <div class="projects-section">
 
-        <div class="project-info">
+    <div class="project-info">
 
-          <div class="project-text">
-            <strong>Deadside (PC / PS5 / Xbox Series X|S)</strong>
-            - Lead Sound Designer responsible for weapon, vehicle, and environmental audio
-            - Utilized Impulse Response (IR) reverberation to deliver realistic and dynamic spatial soundscapes
-            - Oversaw audio asset management and workflow optimization within Unreal Engine, ensuring efficient production pipelines and high-quality audio integration
-          </div>
+      <div class="project-text">
 
-        </div>
+        <strong>Deadside (PC / PS5 / Xbox Series X|S)</strong>
 
-        <div class="slider-container">
+        <ul>
+          <li>Lead Sound Designer responsible for weapon, vehicle, and environmental audio</li>
 
-          <div class="slider">
+          <li>Utilized Impulse Response (IR) reverberation to deliver realistic and dynamic spatial soundscapes</li>
 
-            <div class="slide active">
-              <iframe src="https://www.youtube.com/embed/vV7oKxI_5eA?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-            <div class="slide">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-            <div class="slide">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-          </div>
-
-          <div class="controls">
-            <button class="prev">previous</button>
-            <button class="next">next</button>
-          </div>
-
-        </div>
+          <li>Oversaw audio asset management and workflow optimization within Unreal Engine, ensuring efficient production pipelines and high-quality audio integration</li>
+        </ul>
 
       </div>
 
     </div>
 
+    <div class="slider-container">
 
-    <!-- WELTKRIEG 1: FIRESTORM -->
+      <div class="slider">
 
-    <div class="project-block">
-
-      <h3 class="project-heading">Weltkrieg 1: Firestorm</h3>
-
-      <div class="projects-section">
-
-        <div class="project-info">
-
-          <div class="project-text">
-            <strong>Weltkrieg 1: Firestorm (iOS / Android)</strong>
-            - Lead Sound Designer for weapon audio, artillery, and explosions, focusing on impact, realism, and gameplay readability
-            - Full FMOD integration, including event architecture, parameter-driven systems, mixing, and runtime optimization
-            - The audio reflects the project state as of December; later changes were made without my involvement
-          </div>
-
+        <div class="slide active">
+          <iframe src="https://www.youtube.com/embed/vV7oKxI_5eA?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
         </div>
 
-        <div class="slider-container">
+        <div class="slide">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+        </div>
 
-          <div class="slider">
-
-            <div class="slide active">
-              <iframe src="https://www.youtube.com/embed/ZUR27avriBE?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-            <div class="slide">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-          </div>
-
-          <div class="controls">
-            <button class="prev">previous</button>
-            <button class="next">next</button>
-          </div>
-
+        <div class="slide">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
         </div>
 
       </div>
 
-    </div>
-
-
-    <!-- WORLD OF WARSHIPS -->
-
-    <div class="project-block">
-
-      <h3 class="project-heading">World of Warships</h3>
-
-      <div class="projects-section">
-
-        <div class="project-info">
-
-          <div class="project-text">
-            <strong>World of Warships (PC / PS5 / Xbox Series X|S)</strong>
-            - Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)
-            - Collaborated with cross-disciplinary teams using Jira and Git version control
-            - Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms
-            - Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)
-          </div>
-
-        </div>
-
-        <div class="slider-container">
-
-          <div class="slider">
-
-            <div class="slide active">
-              <iframe src="https://www.youtube.com/embed/i_aqQ3iGrQM?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-            <div class="slide">
-              <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-          </div>
-
-          <div class="controls">
-            <button class="prev">previous</button>
-            <button class="next">next</button>
-          </div>
-
-        </div>
-
+      <div class="controls">
+        <button class="prev">previous video</button>
+        <button class="next">next video</button>
       </div>
-
-    </div>
-
-
-    <!-- NEODASH -->
-
-    <div class="project-block">
-
-      <h3 class="project-heading">Neodash</h3>
-
-      <div class="projects-section">
-
-        <div class="project-info">
-
-          <div class="project-text">
-            <strong>Neodash</strong>
-            - Lead Sound Designer for a UE4-based racing game featuring rhythm-synced, high-energy audio
-            - Integrated reactive audio systems enhancing player immersion
-            - Designed dynamic environmental sound responsive to gameplay and music
-          </div>
-
-        </div>
-
-        <div class="slider-container">
-
-          <div class="slider">
-
-            <div class="slide active">
-              <iframe src="https://www.youtube.com/embed/U8FqwGK7aSg?rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1" allowfullscreen></iframe>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- DEMO REELS -->
-
-    <div class="demo-section">
-
-      <h2 class="section-title">Demo Reels</h2>
-
-      <!-- Demo Reel 2022 -->
-
-      <iframe
-        class="main-video"
-        src="https://www.youtube.com/embed/qpOcg3n6tN8?rel=0&modestbranding=1"
-        allow="encrypted-media"
-        allowfullscreen>
-      </iframe>
-
-      <!-- Second Demo Reel -->
-
-      <iframe
-        class="main-video"
-        src="https://www.youtube.com/embed/AvN4XehdORA?rel=0&modestbranding=1"
-        allow="encrypted-media"
-        allowfullscreen>
-      </iframe>
-
-      <!-- Third Demo Reel -->
-
-      <iframe
-        class="main-video"
-        src="https://www.youtube.com/embed/XDclM74ZV3g?rel=0&modestbranding=1"
-        allow="encrypted-media"
-        allowfullscreen>
-      </iframe>
-
-      <!-- Fourth Demo Reel -->
-
-      <iframe
-        class="main-video"
-        src="https://www.youtube.com/embed/uxe8Nhloq8s?rel=0&modestbranding=1"
-        allow="encrypted-media"
-        allowfullscreen>
-      </iframe>
 
     </div>
 
   </div>
 
-
-  <!-- YOUTUBE API -->
-
-  <script src="https://www.youtube.com/iframe_api"></script>
-
-  <script>
-
-    // ===== SLIDERS FOR EACH GAME =====
-
-    document.querySelectorAll('.project-block').forEach(project => {
-
-      const slides = project.querySelectorAll('.slide');
-      const prevButton = project.querySelector('.prev');
-      const nextButton = project.querySelector('.next');
-
-      let current = 0;
-
-      function showSlide(index) {
-
-        // Pause previous video
-        const currentIframe = slides[current]?.querySelector('iframe');
-
-        if (currentIframe) {
-          currentIframe.contentWindow.postMessage(
-            JSON.stringify({
-              event: 'command',
-              func: 'pauseVideo',
-              args: []
-            }),
-            '*'
-          );
-        }
-
-        slides.forEach((slide, i) => {
-          slide.classList.toggle('active', i === index);
-        });
-
-        current = index;
-
-      }
-
-      if (prevButton && nextButton) {
-
-        prevButton.addEventListener('click', () => {
-          showSlide((current - 1 + slides.length) % slides.length);
-        });
-
-        nextButton.addEventListener('click', () => {
-          showSlide((current + 1) % slides.length);
-        });
-
-      }
-
-      showSlide(0);
-
-    });
+</section>
 
 
-    // ===== HEX CANVAS ANIMATION =====
+<!-- ================= WELTKRIEG ================= -->
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
+<section class="project-block">
 
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+  <h2 class="project-heading">Weltkrieg 1: Firestorm</h2>
 
-    canvas.width = width;
-    canvas.height = height;
+  <div class="projects-section">
 
-    window.addEventListener('resize', () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
+    <div class="project-info">
 
-      canvas.width = width;
-      canvas.height = height;
-    });
+      <div class="project-text">
 
-    const hexes = [];
+        <strong>Weltkrieg 1: Firestorm (iOS / Android)</strong>
 
-    const hexRadius = 40;
-    const hexSpacing = hexRadius * 1.5;
+        <ul>
+          <li>Lead Sound Designer for weapon audio, artillery, and explosions, focusing on impact, realism, and gameplay readability</li>
 
-    const mouse = {
-      x: -1000,
-      y: -1000
-    };
+          <li>Full FMOD integration, including event architecture, parameter-driven systems, mixing, and runtime optimization</li>
 
-    window.addEventListener('mousemove', e => {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-    });
+          <li>The audio reflects the project state as of December; later changes were made without my involvement</li>
+        </ul>
 
-    function createHexes() {
+      </div>
 
-      hexes.length = 0;
+    </div>
 
-      const rows = Math.ceil(height / (hexRadius * Math.sqrt(3) / 2)) + 3;
-      const cols = Math.ceil(width / hexSpacing) + 1;
+    <div class="slider-container">
 
-      for (let y = 0; y < rows; y++) {
+      <div class="slider">
 
-        for (let x = 0; x < cols; x++) {
+        <div class="slide active">
+          <iframe src="https://www.youtube.com/embed/ZUR27avriBE?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+        </div>
 
-          hexes.push({
-            x: x * hexSpacing + (y % 2 ? hexSpacing / 2 : 0),
-            y: y * Math.sqrt(3) / 2 * hexRadius,
-            offset: Math.random() * Math.PI * 2,
-            scaleOffset: Math.random() * Math.PI * 2
-          });
+        <div class="slide">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+        </div>
 
-        }
+      </div>
 
-      }
+      <div class="controls">
+        <button class="prev">previous video</button>
+        <button class="next">next video</button>
+      </div>
 
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= WORLD OF WARSHIPS ================= -->
+
+<section class="project-block">
+
+  <h2 class="project-heading">World of Warships</h2>
+
+  <div class="projects-section">
+
+    <div class="project-info">
+
+      <div class="project-text">
+
+        <strong>World of Warships (PC / PS5 / Xbox Series X|S)</strong>
+
+        <ul>
+          <li>Senior Sound Designer for multi-platform release (PS4/5, Xbox One, iOS)</li>
+
+          <li>Collaborated with cross-disciplinary teams using Jira and Git version control</li>
+
+          <li>Optimized Wwise audio pipeline for latest-gen consoles, PC, and mobile platforms</li>
+
+          <li>Created and integrated ship weapon sounds, UI audio, and new gameplay mechanics (consoles)</li>
+        </ul>
+
+      </div>
+
+    </div>
+
+    <div class="slider-container">
+
+      <div class="slider">
+
+        <div class="slide active">
+          <iframe src="https://www.youtube.com/embed/i_aqQ3iGrQM?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+        </div>
+
+        <div class="slide">
+          <iframe src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+        </div>
+
+      </div>
+
+      <div class="controls">
+        <button class="prev">previous video</button>
+        <button class="next">next video</button>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= NEODASH ================= -->
+
+<section class="project-block">
+
+  <h2 class="project-heading">Neodash</h2>
+
+  <div class="projects-section">
+
+    <div class="project-info">
+
+      <div class="project-text">
+
+        <strong>Neodash</strong>
+
+        <ul>
+          <li>Lead Sound Designer for a UE4-based racing game featuring rhythm-synced, high-energy audio</li>
+
+          <li>Integrated reactive audio systems enhancing player immersion</li>
+
+          <li>Designed dynamic environmental sound responsive to gameplay and music</li>
+        </ul>
+
+      </div>
+
+    </div>
+
+    <div class="slider-container">
+
+      <div class="slider">
+
+        <div class="slide active">
+          <iframe src="https://www.youtube.com/embed/U8FqwGK7aSg?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ================= DEMO REELS ================= -->
+
+<section class="demo-section">
+
+  <h2 class="project-heading">Demo Reels</h2>
+
+  <div class="slider-container">
+
+    <div class="slider">
+
+      <div class="slide active">
+        <iframe src="https://www.youtube.com/embed/qpOcg3n6tN8?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+      </div>
+
+      <div class="slide">
+        <iframe src="https://www.youtube.com/embed/AvN4XehdORA?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+      </div>
+
+      <div class="slide">
+        <iframe src="https://www.youtube.com/embed/XDclM74ZV3g?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+      </div>
+
+      <div class="slide">
+        <iframe src="https://www.youtube.com/embed/uxe8Nhloq8s?rel=0&modestbranding=1&enablejsapi=1" allowfullscreen></iframe>
+      </div>
+
+    </div>
+
+    <div class="controls">
+      <button class="prev">previous video</button>
+      <button class="next">next video</button>
+    </div>
+
+  </div>
+
+</section>
+
+</div>
+
+
+<!-- ================= JAVASCRIPT ================= -->
+
+<script>
+
+// ===== ALL VIDEO SLIDERS =====
+
+document.querySelectorAll('.slider-container').forEach(container => {
+
+  const slides = container.querySelectorAll('.slide');
+  const prevButton = container.querySelector('.prev');
+  const nextButton = container.querySelector('.next');
+
+  let current = 0;
+
+  // Hide controls if there is only one video
+
+  if (slides.length <= 1) {
+    const controls = container.querySelector('.controls');
+
+    if (controls) {
+      controls.style.display = 'none';
+    }
+  }
+
+  function showSlide(index) {
+
+    // Pause currently playing video
+
+    const currentIframe = slides[current].querySelector('iframe');
+
+    if (currentIframe) {
+      currentIframe.contentWindow.postMessage(
+        JSON.stringify({
+          event: 'command',
+          func: 'pauseVideo',
+          args: []
+        }),
+        '*'
+      );
     }
 
-    createHexes();
+    // Change active video
 
-    window.addEventListener('resize', createHexes);
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === index);
+    });
 
-    function drawHex(x, y, r, phase, highlight = 0, scale = 1, alphaScale = 1) {
+    current = index;
 
-      ctx.beginPath();
+  }
 
-      for (let i = 0; i < 6; i++) {
+  if (prevButton && nextButton) {
 
-        let angle = Math.PI / 3 * i;
+    prevButton.addEventListener('click', () => {
+      showSlide((current - 1 + slides.length) % slides.length);
+    });
 
-        let px = x + r * Math.cos(angle) * scale;
-        let py = y + r * Math.sin(angle) * scale;
+    nextButton.addEventListener('click', () => {
+      showSlide((current + 1) % slides.length);
+    });
 
-        if (i === 0) {
-          ctx.moveTo(px, py);
-        } else {
-          ctx.lineTo(px, py);
-        }
+  }
 
-      }
+});
 
-      ctx.closePath();
 
-      let alpha = (0.05 + 0.05 * Math.sin(phase) + highlight) * alphaScale;
+// ===== HEXAGON BACKGROUND ANIMATION =====
 
-      ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 
-    }
+let width = window.innerWidth;
+let height = window.innerHeight;
 
-    function animate() {
+canvas.width = width;
+canvas.height = height;
 
-      ctx.clearRect(0, 0, width, height);
+const hexes = [];
 
-      const time = Date.now() / 2000;
+const hexRadius = 40;
+const hexSpacing = hexRadius * 1.5;
 
-      hexes.forEach(h => {
+const mouse = {
+  x: -1000,
+  y: -1000
+};
 
-        const dx = Math.sin(time + h.offset) * 5;
-        const dy = Math.cos(time + h.offset) * 5;
+function createHexes() {
 
-        const distX = h.x + dx - mouse.x;
-        const distY = h.y + dy - mouse.y;
+  hexes.length = 0;
 
-        const dist = Math.sqrt(distX * distX + distY * distY);
+  width = window.innerWidth;
+  height = window.innerHeight;
 
-        let repelX = 0;
-        let repelY = 0;
-        let highlight = 0;
-        let scale = 1;
+  canvas.width = width;
+  canvas.height = height;
 
-        const radius = 120;
+  const rows = Math.ceil(height / (hexRadius * Math.sqrt(3) / 2)) + 3;
+  const cols = Math.ceil(width / hexSpacing) + 1;
 
-        if (dist < radius && dist > 0) {
+  for (let y = 0; y < rows; y++) {
 
-          const force = (radius - dist) / radius;
+    for (let x = 0; x < cols; x++) {
 
-          repelX = (distX / dist) * force * 20;
-          repelY = (distY / dist) * force * 20;
-
-          highlight = force * 0.4;
-          scale = 1 + force * 0.3;
-
-        }
-
-        const pulse = 0.05 * Math.sin(time * 3 + h.scaleOffset);
-
-        const alphaScale = Math.max(
-          0,
-          1 - ((h.y + dx + dy + repelY) / height)
-        );
-
-        drawHex(
-          h.x + dx + repelX,
-          h.y + dy + repelY,
-          hexRadius,
-          h.offset + time,
-          highlight,
-          scale + pulse,
-          alphaScale
-        );
-
+      hexes.push({
+        x: x * hexSpacing + (y % 2 ? hexSpacing / 2 : 0),
+        y: y * Math.sqrt(3) / 2 * hexRadius,
+        offset: Math.random() * Math.PI * 2,
+        scaleOffset: Math.random() * Math.PI * 2
       });
 
-      requestAnimationFrame(animate);
+    }
+
+  }
+
+}
+
+createHexes();
+
+window.addEventListener('resize', createHexes);
+
+window.addEventListener('mousemove', e => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+function drawHex(x, y, r, phase, highlight = 0, scale = 1, alphaScale = 1) {
+
+  ctx.beginPath();
+
+  for (let i = 0; i < 6; i++) {
+
+    const angle = Math.PI / 3 * i;
+
+    const px = x + r * Math.cos(angle) * scale;
+    const py = y + r * Math.sin(angle) * scale;
+
+    if (i === 0) {
+      ctx.moveTo(px, py);
+    } else {
+      ctx.lineTo(px, py);
+    }
+
+  }
+
+  ctx.closePath();
+
+  const alpha = (0.05 + 0.05 * Math.sin(phase) + highlight) * alphaScale;
+
+  ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+}
+
+function animate() {
+
+  ctx.clearRect(0, 0, width, height);
+
+  const time = Date.now() / 2000;
+
+  hexes.forEach(h => {
+
+    const dx = Math.sin(time + h.offset) * 5;
+    const dy = Math.cos(time + h.offset) * 5;
+
+    const distX = h.x + dx - mouse.x;
+    const distY = h.y + dy - mouse.y;
+
+    const dist = Math.sqrt(distX * distX + distY * distY);
+
+    let repelX = 0;
+    let repelY = 0;
+    let highlight = 0;
+    let scale = 1;
+
+    const radius = 120;
+
+    if (dist < radius && dist > 0) {
+
+      const force = (radius - dist) / radius;
+
+      repelX = (distX / dist) * force * 20;
+      repelY = (distY / dist) * force * 20;
+
+      highlight = force * 0.4;
+      scale = 1 + force * 0.3;
 
     }
 
-    animate();
+    const pulse = 0.05 * Math.sin(time * 3 + h.scaleOffset);
 
-  </script>
+    const alphaScale = Math.max(
+      0,
+      1 - ((h.y + dx + dy + repelY) / height)
+    );
+
+    drawHex(
+      h.x + dx + repelX,
+      h.y + dy + repelY,
+      hexRadius,
+      h.offset + time,
+      highlight,
+      scale + pulse,
+      alphaScale
+    );
+
+  });
+
+  requestAnimationFrame(animate);
+
+}
+
+animate();
+
+</script>
 
 </body>
 </html>
